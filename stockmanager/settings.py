@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'widget_tweaks',
     'django.contrib.humanize', #Pour le format des montants
-    'dashboard_app.apps.DashboardAppConfig', 
+    'dashboard_app.apps.DashboardAppConfig',
 ]
 
 MIDDLEWARE = [
@@ -92,12 +92,12 @@ WSGI_APPLICATION = 'stockmanager.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'stockdb',
-        'USER': 'postgres',
+        'ENGINE':   'django.db.backends.postgresql',
+        'NAME':     'stockmanagerdb',
+        'USER':     'stockmanageruser',
         'PASSWORD': '16112001ng',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'HOST':     'STEVE16-4719.postgres.pythonanywhere-services.com',
+        'PORT':     '14719',
     }
 }
 
@@ -137,7 +137,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / 'stockapp/static', 
+STATICFILES_DIRS = [BASE_DIR / 'stockapp/static',
                     os.path.join(BASE_DIR, 'dashboard_app/static'),
                     ]
 
