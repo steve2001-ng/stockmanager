@@ -1,0 +1,15 @@
+# Environnement virtuel
+venv/
+
+# Fichiers compilés Python
+__pycache__/
+*.py[cod]
+
+# Static et media générés
+staticfiles/
+media/
+
+# Fichiers locaux / IDE
+*.sqlite3
+.env
+.DS_Store
