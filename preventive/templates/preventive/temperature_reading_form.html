@@ -1,0 +1,129 @@
+{% extends "preventive/base.html" %}
+{% load static %}
+
+{% block content %}
+{% if form.errors %}
+<div class="alert alert-danger">
+    <strong>Erreurs :</strong>
+    {{ form.errors }}
+</div>
+{% endif %}
+<div class="container mt-4">
+    <div class="card shadow-sm" style="max-width: 600px; margin: 0 auto;">
+        <div class="card-header bg-primary text-white py-3">
+            <h4 class="mb-0 text-center">
+                <i class="fas fa-thermometer-half me-2"></i>
+                Nouveau Relevé de Température
+            </h4>
+        </div>
+        <div class="card-body">
+            <form method="post" class="needs-validation" novalidate>
+                {% csrf_token %}
+                
+                <!-- Champ Équipement -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold">
+                        <i class="fas fa-snowflake me-2 text-primary"></i>
+                        Équipement
+                    </label>
+                    {{ form.equipment }}
+                    {% if form.equipment.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ form.equipment.errors.as_text }}
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Date -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold">
+                        <i class="fas fa-calendar-day me-2 text-primary"></i>
+                        Date
+                    </label>
+                    <div class="input-group">
+                        {{ form.reading_date }}
+                        <span class="input-group-text">jj/mm/aaaa</span>
+                    </div>
+                </div>
+                
+                <!-- Température -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold">
+                        <i class="fas fa-temperature-low me-2 text-danger"></i>
+                        Température (FC)
+                    </label>
+                    <div class="input-group">
+                        {{ form.temperature }}
+                        <span class="input-group-text">°C</span>
+                    </div>
+                </div>
+                
+                <!-- Heure -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold">
+                        <i class="fas fa-clock me-2 text-primary"></i>
+                        Heure
+                    </label>
+                    {{ form.reading_time }}
+                </div>
+                
+                <!-- Enregistré par -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold">
+                        <i class="fas fa-user me-2 text-primary"></i>
+                        Enregistré par
+                    </label>
+                    {{ form.recorded_by }}
+                </div>
+                
+                <!-- Notes -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold">
+                        <i class="fas fa-comment me-2 text-primary"></i>
+                        Notes
+                    </label>
+                    {{ form.notes }}
+                </div>
+                
+                <!-- Boutons -->
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="{% url 'preventive:temperature_readings' %}" class="btn btn-outline-secondary">
+                        <i class="fas fa-times me-1"></i> Annuler
+                    </a>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-save me-1"></i> Enregistrer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Styles personnalisés */
+    .card {
+        border-radius: 10px;
+    }
+    
+    .form-label {
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+    
+    .form-control, .form-select {
+        border-radius: 5px;
+        padding: 0.5rem 1rem;
+    }
+    
+    textarea.form-control {
+        min-height: 100px;
+    }
+    
+    /* Style pour les champs date/heure */
+    input[type="date"], input[type="time"] {
+        padding: 0.5rem;
+    }
+</style>
+{% endblock %}

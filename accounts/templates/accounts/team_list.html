@@ -1,0 +1,62 @@
+{% extends "accounts/base_personnel.html" %}
+{% load static %}
+{% block content %}
+<div class="container-fluid mt-4">
+  <!-- En-tête de page -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="m-0"><i class="bi bi-people-fill me-2 text-primary"></i>Équipes de maintenance</h3>
+    <a href="{% url 'accounts:team_create' %}" class="btn btn-success">
+      <i class="bi bi-plus-circle me-1"></i>Nouvelle équipe
+    </a>
+  </div>
+
+  <!-- Table des équipes -->
+  <div class="card shadow mb-4">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead class="table-primary">
+            <tr>
+              <th>Code</th>
+              <th>Spécialité</th>
+              <th>Statut</th>
+              <th>Membres</th>
+              <th class="text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for team in teams %}
+            <tr>
+              <td>{{ team.code }}</td>
+              <td>{{ team.get_specialty_display }}</td>
+              <td>{{ team.get_status_display }}</td>
+              <td>
+                {% for u in team.members.all %}
+                  {{ u.get_full_name }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+              </td>
+              <td class="text-end">
+                <a href="{% url 'accounts:team_edit' team.pk %}"
+                   class="btn btn-sm btn-outline-primary me-1" title="Modifier">
+                  <i class="bi bi-pencil-fill"></i>
+                </a>
+                <a href="{% url 'accounts:team_delete' team.pk %}"
+                   class="btn btn-sm btn-outline-danger" title="Supprimer">
+                  <i class="bi bi-trash-fill"></i>
+                </a>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="5" class="text-center text-muted py-3">
+                Aucune équipe pour le moment.
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

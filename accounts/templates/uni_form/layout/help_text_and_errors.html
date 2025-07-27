@@ -1,0 +1,9 @@
+{% if field.help_text %}
+    <p id="hint_{{ field.auto_id }}" class="help-block">{{ field.help_text|safe }}</p>
+{% endif %}
+
+{% if field.errors %}
+    {% for error in field.errors %}
+        <p id="error_{{ forloop.counter }}_{{ field.auto_id }}" class="help-block error-block">{{ error }}</p>
+    {% endfor %}
+{% endif %}

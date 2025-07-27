@@ -1,0 +1,229 @@
+{% extends 'pannes/base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Historique des Pannes{% endblock %}
+
+{% block content %}
+<div class="card shadow">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h3 class="mb-0">
+            <i class="fas fa-history me-2"></i>Historique des Pannes
+        </h3>
+        <a href="{% url 'pannes:export_pannes_pdf' %}?period={{ active_period }}" 
+        class="btn btn-light ms-2">
+            <i class="fas fa-file-pdf me-1"></i> Historique des pannes
+        </a>
+        <a href="{% url 'pannes:nouvelle_panne' %}" class="btn btn-light">
+            <i class="fas fa-plus-circle me-1"></i> Nouvelle Panne
+        </a>
+    </div>    
+</div>
+
+<!-- Widget de filtrage et statistiques -->
+<div class="card mb-4 shadow-sm">
+    <div class="card-body py-3">
+        <div class="d-flex flex-wrap justify-content-between align-items-center">
+            <!-- Filtres période -->
+            <div class="btn-group btn-group-sm mb-2 mb-md-0" role="group">
+                <a href="?period=all" 
+                   class="btn btn-outline-secondary {% if active_period == 'all' or not active_period %}active{% endif %}">
+                    Toutes les pannes
+                </a>
+                <a href="?period=today" 
+                   class="btn btn-outline-primary {% if active_period == 'today' %}active{% endif %}">
+                    Aujourd'hui
+                </a>
+                <a href="?period=week" 
+                   class="btn btn-outline-primary {% if active_period == 'week' %}active{% endif %}">
+                    Cette semaine
+                </a>
+                <a href="?period=month" 
+                   class="btn btn-outline-primary {% if active_period == 'month' %}active{% endif %}">
+                    Ce mois
+                </a>
+            </div>
+            
+            <!-- Compteurs -->
+            <div class="d-flex flex-wrap gap-3">
+                <span class="badge bg-secondary">
+                    <i class="fas fa-history me-1"></i> Total: {{ count_all }}
+                </span>
+                <span class="badge bg-primary">
+                    <i class="fas fa-calendar-day me-1"></i> Aujourd'hui: {{ count_today }}
+                </span>
+                <span class="badge bg-info">
+                    <i class="fas fa-calendar-week me-1"></i> Semaine: {{ count_week }}
+                </span>
+                <span class="badge bg-warning text-dark">
+                    <i class="fas fa-calendar-alt me-1"></i> Mois: {{ count_month }}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover table-striped align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th><i class="fas fa-hashtag me-1"></i> Code</th>
+                        <th><i class="fas fa-heading me-1"></i> Intitulé</th>
+                        <th><i class="fas fa-exclamation-triangle me-1"></i> Niveau</th>
+                        <th><i class="fas fa-user me-1"></i> Émetteur</th>
+                        <th><i class="fas fa-desktop me-1"></i> Équipement</th>
+                        <th><i class="fas fa-map-marker-alt me-1"></i> Site</th>
+                        <th><i class="fas fa-calendar-plus me-1"></i> Création</th>
+                        <th><i class="fas fa-edit me-1"></i> Modif.</th>
+                        <th><i class="fas fa-check-circle me-1"></i> Résolue</th>
+                        <th><i class="fas fa-align-left me-1"></i> Résumé</th>
+                        <th><i class="fas fa-calendar-alt me-1"></i> Date/Heure</th>
+                        <th><i class="fas fa-cog me-1"></i> Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for panne in pannes %}
+                    <tr>
+                        <td>{{ panne.code_panne }}</td>
+                        <td>{{ panne.intitule }}</td>
+                        <td>
+                            {% if panne.niveau_alerte == 'faible' %}
+                                <span class="badge bg-info">
+                                    <i class="fas fa-info-circle me-1"></i> Faible
+                                </span>
+                            {% elif panne.niveau_alerte == 'moyen' %}
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fas fa-exclamation-circle me-1"></i> Moyen
+                                </span>
+                            {% elif panne.niveau_alerte == 'eleve' %}
+                                <span class="badge bg-danger">
+                                    <i class="fas fa-fire me-1"></i> Élevé
+                                </span>
+                            {% else %}
+                                <span class="badge bg-dark">
+                                    <i class="fas fa-skull-crossbones me-1"></i> Critique
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td>{{ panne.emetteur }}</td>
+                        <td>{{ panne.equipement.designation }}</td>
+                        <td>{{ panne.site }}</td>
+                        <td>{{ panne.date_creation|date:"d/m/Y H:i" }}</td>
+                        <td>{{ panne.date_modification|date:"d/m/Y H:i" }}</td>
+                        <td>
+                            {% if panne.resolue %}
+                                <span class="badge bg-success"><i class="fas fa-check me-1"></i>Oui</span>
+                            {% else %}
+                                <span class="badge bg-danger"><i class="fas fa-times me-1"></i>Non</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ panne.description|truncatechars:50 }}</td>
+                        <td>{{ panne.date_heure_panne|date:"d/m/Y H:i" }}</td>
+                        <td class="d-flex gap-1">
+                            <a href="{% url 'pannes:modifier_panne' panne.pk %}" class="btn btn-sm btn-primary" title="Modifier">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="{% url 'pannes:supprimer_panne' panne.pk %}" class="btn btn-sm btn-danger"
+                               onclick="return confirm('❗ Voulez-vous vraiment supprimer cette panne ?');" title="Supprimer">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                            <button class="btn btn-sm btn-info" title="Détails"
+                                    data-bs-toggle="modal" data-bs-target="#detailsModal{{ panne.pk }}">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </td>
+                    </tr>
+
+                    <!-- Modal de détails (inchangé) -->
+                    <div class="modal fade" id="detailsModal{{ panne.pk }}" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header bg-primary text-white">
+                                    <h5 class="modal-title">
+                                        <i class="fas fa-info-circle me-2"></i>Détails de la panne {{ panne.code_panne }}
+                                    </h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <!-- Contenu détaillé… -->
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <p><strong><i class="fas fa-heading me-2"></i>Intitulé:</strong> {{ panne.intitule }}</p>
+                                            <p><strong><i class="fas fa-user me-2"></i>Émetteur:</strong> {{ panne.emetteur }}</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><strong><i class="fas fa-desktop me-2"></i>Équipement:</strong> {{ panne.equipement.designation }}</p>
+                                            <p><strong><i class="fas fa-clock me-2"></i>Date/Heure:</strong> {{ panne.date_heure_panne|date:"d/m/Y H:i" }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <h5><i class="fas fa-align-left me-2"></i>Description complète :</h5>
+                                        <div class="border p-3 bg-light rounded">
+                                            {{ panne.description|linebreaks }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                        <i class="fas fa-times me-1"></i> Fermer
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <tr>
+                        <td colspan="13" class="text-center text-muted">
+                            <i class="fas fa-inbox fa-2x mb-2"></i><br>
+                            Aucune panne enregistrée pour le moment.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if is_paginated %}
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1">
+                        <i class="fas fa-angle-double-left"></i>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                        <i class="fas fa-angle-left"></i>
+                    </a>
+                </li>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <li class="page-item active"><a class="page-link">{{ num }}</a></li>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                        <i class="fas fa-angle-right"></i>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">
+                        <i class="fas fa-angle-double-right"></i>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends "preventive/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- En-tête avec navigation -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="fas fa-calendar-alt me-2"></i>Calendrier Préventif</h2>
+        <div class="btn-group">
+            <a href="?date={{ prev_week }}" class="btn btn-outline-primary">
+                <i class="fas fa-chevron-left"></i> Semaine précédente
+            </a>
+            <a href="?date={{ current_week }}" class="btn btn-outline-secondary">
+                Cette semaine
+            </a>
+            <a href="?date={{ next_week }}" class="btn btn-outline-primary">
+                Semaine suivante <i class="fas fa-chevron-right"></i>
+            </a>
+            <a href="{% url 'preventive:task_create' %}" class="btn btn-success ms-2">
+                <i class="fas fa-plus me-1"></i> Nouvelle Opération
+            </a>
+        </div>
+    </div>
+
+    <!-- Calendrier -->
+    <div class="card shadow">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-bordered mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th style="width: 20%">Équipement</th>
+                            {% for day in days %}
+                            <th class="text-center {% if day == today %}bg-info{% endif %}" style="width: 11.42%">
+                                {{ day|date:"D"|upper }}<br>
+                                {{ day|date:"d/m" }}
+                            </th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% regroup tasks by equipment as equipment_tasks %}
+                        {% for equipment in equipment_tasks %}
+                        <tr>
+                            <td>
+                                <strong>{{ equipment.grouper.designation }}</strong>
+                            </td>
+                            {% for day in days %}
+                            <td>
+                                {% for task in equipment.list %}
+                                {% if task.next_due == day %}
+                                <div class="task-item task-type-{{ task.task_type }}">
+                                    <div class="d-flex justify-content-between">
+                                        <small class="fw-bold">{{ task.get_task_type_display }}</small>
+                                        <div class="task-actions">
+                                            <a href="{% url 'preventive:task_update' task.pk %}" 
+                                               class="text-dark" title="Modifier">
+                                                <i class="fas fa-edit fa-xs"></i>
+                                            </a>
+                                            <a href="{% url 'preventive:task_delete' task.pk %}" 
+                                               class="text-danger ms-2" title="Supprimer">
+                                                <i class="fas fa-trash-alt fa-xs"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <small class="d-block">{{ task.technician }}</small>
+                                    <small class="d-block">{{ task.duration_hours }}h</small>
+                                    {% if task.completed %}
+                                    <span class="badge bg-success mt-1">Terminé</span>
+                                    {% else %}
+                                    <span class="badge bg-warning text-dark mt-1">Planifié</span>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                            </td>
+                            {% endfor %}
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="8" class="text-center text-muted">
+                                Aucune opération préventive planifiée
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

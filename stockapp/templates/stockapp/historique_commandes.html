@@ -1,0 +1,179 @@
+{% extends "stockapp/base.html" %}
+{% load static %}
+
+{% block title %}Historique des Commandes - {{ categorie.nom }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Historique des Commandes - {{ categorie.nom }}
+            <a href="{% url 'stockapp:historique_commandes_pdf' categorie.id %}" 
+            class="btn btn-outline-secondary btn-sm" 
+            target="_blank">
+                <i class="fas fa-file-pdf"></i> Télécharger historique commandes PDF
+            </a>
+        </h1>
+        <div>
+            <a href="{% url 'stockapp:creer_commande' categorie.id %}" class="btn btn-primary mr-2">
+                <i class="fas fa-plus"></i> Nouvelle commande
+            </a>
+            <a href="{% url 'stockapp:produits_categorie' categorie.id %}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Retour aux produits
+            </a>
+        </div>
+    </div>
+
+    <div class="search-bar-container mb-4">
+        <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" id="command-search" placeholder="Rechercher dans les commandes..." class="form-control">
+            <button id="reset-search" class="btn btn-outline-secondary ml-2">
+                <i class="fas fa-times"></i> Réinitialiser
+            </button>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="product-table" id="commands-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Désignation</th>
+                    <th>Quantité</th>
+                    <th>Caractéristiques</th>
+                    <th>Objet</th>
+                    <th>Initié par</th>
+                    <th>Statut</th>
+                    <th>Actions</th> 
+                </tr>
+            </thead>
+            <tbody>
+                {% for commande in commandes %}
+                <tr>
+                    <td>CMD-{{ commande.id|stringformat:"04d" }}</td> 
+                    <td>{{ commande.designation }}</td>
+                    <td>{{ commande.quantite }}</td>
+                    <td class="multiline-text">{{ commande.caracteristiques|linebreaksbr }}</td>
+                    <td>{{ commande.objet }}</td>
+                    <td>{{ commande.initie_par }}</td>
+                    <td>
+                        <span class="status-badge 
+                            {% if commande.status == 'validee' %}status-success
+                            {% elif commande.status == 'rejetee' %}status-danger
+                            {% else %}status-warning{% endif %}">
+                            {{ commande.get_status_display }}
+                        </span>
+                    </td>
+                    <td>
+                        {% if commande.status == commande.EN_ATTENTE %}
+                        <div class="btn-group" role="group">
+                            <!-- Valider -->
+                            <form method="post" action="{% url 'stockapp:valider_commande' commande.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-success" title="Valider">
+                                    <i class="fas fa-check"></i> Valider
+                                </button>
+                            </form>
+
+                            <!-- Rejeter -->
+                            <form method="post" action="{% url 'stockapp:rejeter_commande' commande.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-danger" title="Rejeter">
+                                    <i class="fas fa-times"></i> Rejeter
+                                </button>
+                            </form>
+
+                            <!-- Télécharger PDF -->
+                            <a href="{% url 'stockapp:commande_pdf' commande.id %}" class="btn btn-sm btn-outline-secondary" title="Télécharger PDF" target="_blank" download>
+                                <i class="fas fa-file-pdf"></i> Télécharger PDF
+                            </a>
+                        </div>
+                        {% else %}
+                        <!-- Télécharger PDF -->
+                        <a href="{% url 'stockapp:commande_pdf' commande.id %}" class="btn btn-sm btn-outline-secondary" title="Télécharger PDF" target="_blank" download>
+                            <i class="fas fa-file-pdf"></i> Télécharger PDF
+                        </a>
+                        {% endif %}
+                    </td>
+
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center">Aucune commande enregistrée</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('command-search');
+        const resetBtn = document.getElementById('reset-search');
+        const tableRows = document.querySelectorAll('#commands-table tbody tr');
+        
+        // Fonction de filtrage
+        function filterCommands() {
+            const searchTerm = searchInput.value.toLowerCase();
+            
+            tableRows.forEach(row => {
+                const rowText = row.textContent.toLowerCase();
+                row.style.display = rowText.includes(searchTerm) ? '' : 'none';
+            });
+        }
+        
+        // Écouteur d'événements
+        searchInput.addEventListener('input', filterCommands);
+        
+        // Réinitialisation
+        resetBtn.addEventListener('click', function() {
+            searchInput.value = '';
+            tableRows.forEach(row => row.style.display = '');
+        });
+    });
+</script>
+    
+<style>
+    /* Styles pour la barre de recherche */
+    .search-bar-container {
+        margin: 20px 0;
+    }
+    
+    .search-bar {
+        display: flex;
+        align-items: center;
+        background: white;
+        border-radius: 5px;
+        padding: 8px 15px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .search-bar i {
+        color: #6c757d;
+        margin-right: 10px;
+    }
+    
+    #command-search {
+        flex-grow: 1;
+        border: none;
+        outline: none;
+        padding: 8px;
+    }
+    
+    /* Style pour les lignes cachées */
+    .product-table tr[style="display: none;"] {
+        display: none !important;
+    }
+    
+    /* Style pour les boutons d'action */
+    .btn-group {
+        white-space: nowrap;
+    }
+    
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+    }
+</style>
+{% endblock %}

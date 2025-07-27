@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Historique des Mouvements - {{ categorie.nom }}</title>
+    <style>
+        body {
+            font-family: DejaVu Sans, Arial, sans-serif;
+            font-size: 12px;
+            color: #000;
+        }
+        h1 {
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+        p {
+            margin: 5px 0;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            border: 1px solid #444;
+            padding: 6px;
+            text-align: left;
+        }
+        th {
+            background-color: #eee;
+        }
+        .text-center {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Historique des Mouvements de Stock</h1>
+
+    <div class="section">
+        <p><strong>Catégorie :</strong> {{ categorie.nom }}</p>
+        <p><strong>Date d'impression :</strong> {{ now|date:"d/m/Y H:i" }}</p>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Produit</th>
+                <th>Type</th>
+                <th>Quantité</th>
+                <th>Motif</th>
+                <th>Effectué par</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for mouvement in mouvements %}
+            <tr>
+                <td>{{ mouvement.date|date:"d/m/Y H:i" }}</td>
+                <td>{{ mouvement.produit.designation }}</td>
+                <td>{{ mouvement.get_type_display }}</td>
+                <td>{{ mouvement.quantite }}</td>
+                <td>{{ mouvement.motif }}</td>
+                <td>{{ mouvement.effectue_par }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center">Aucun mouvement enregistré pour cette catégorie.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>

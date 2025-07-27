@@ -1,0 +1,209 @@
+/* Styles pour les relevés de température */
+.temperature-0 { color: #0d6efd; }  /* Bleu pour < 0°C */
+.temperature-1 { color: #198754; }  /* Vert pour 0-1°C */
+.temperature-2 { color: #fd7e14; }  /* Orange pour 1-2°C */
+.temperature-3 { color: #dc3545; }  /* Rouge pour > 2°C */
+
+/* Calendrier préventif */
+.calendar-day {
+    position: relative;
+    min-height: 80px;
+}
+.calendar-task {
+    position: absolute;
+    width: calc(100% - 10px);
+    left: 5px;
+    border-radius: 4px;
+    padding: 2px 5px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    z-index: 1;
+}
+.task-cleaning { background-color: #0dcaf0; }
+.task-inspection { background-color: #ffc107; color: #000; }
+.task-part_replacement { background-color: #fd7e14; }
+.task-calibration { background-color: #20c997; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .calendar-table {
+        font-size: 0.8rem;
+    }
+    .temperature-form .col-md-6 {
+        margin-bottom: 1rem;
+    }
+}
+
+/* Formulaire de relevé de température */
+.temperature-form .form-floating {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.temperature-form .form-floating label {
+    padding-left: 2.5rem;
+    transition: all 0.3s ease;
+}
+
+.temperature-form .form-control,
+.temperature-form .form-select {
+    padding-left: 2.5rem;
+    height: calc(3.5rem + 2px);
+}
+
+.temperature-form .form-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 5;
+    color: #6c757d;
+}
+
+.temperature-form textarea.form-control {
+    min-height: 120px;
+    padding-top: 1.625rem;
+}
+
+/* Style pour le select */
+.form-select {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-select:focus {
+    border-color: #86b7fe;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Style pour les boutons d'action */
+.btn-action {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 2px;
+}
+
+/* Animation au survol */
+.btn-action:hover {
+    transform: scale(1.1);
+    transition: transform 0.2s;
+}
+
+/* Style pour les modals */
+.modal-content {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* Filtres et compteurs */
+.filter-container {
+    background-color: #f8f9fa;
+    border-radius: 0.5rem;
+    padding: 1rem;
+}
+
+.btn-period {
+    min-width: 100px;
+    text-align: center;
+    margin: 0 0.25rem;
+}
+
+.btn-period.active {
+    font-weight: bold;
+    box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.5);
+}
+
+.badge-count {
+    font-size: 0.85rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .filter-buttons {
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+    
+    .counters {
+        justify-content: center !important;
+    }
+    
+    .btn-period {
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* Styles pour le calendrier préventif */
+.task-item {
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.task-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.task-actions {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.task-item:hover .task-actions {
+    opacity: 1;
+}
+
+/* Couleurs par type de tâche */
+.task-type-NET { border-left-color: #0dcaf0 !important; }
+.task-type-INS { border-left-color: #ffc107 !important; }
+.task-type-REM { border-left-color: #dc3545 !important; }
+.task-type-CAL { border-left-color: #20c997 !important; }
+.task-type-AUT { border-left-color: #6c757d !important; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .calendar-table {
+        font-size: 0.8rem;
+    }
+    
+    .task-item {
+        padding: 0.25rem !important;
+    }
+    
+    .task-actions {
+        opacity: 1; /* Toujours visibles sur mobile */
+    }
+}
+
+/* static/css/styles.css */
+.task-type-NET {
+    background-color: rgba(13, 202, 240, 0.16);
+    border-left: 4px solid #0dcaf0;
+}
+.task-type-INS {
+    background-color: rgba(255, 193, 7, 0.16);
+    border-left: 4px solid #ffc107;
+}
+.task-type-REM {
+    background-color: rgba(220, 53, 69, 0.16);
+    border-left: 4px solid #dc3545;
+}
+/* ... autres types */

@@ -1,0 +1,1022 @@
+[
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "admin",
+    "model": "logentry"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "auth",
+    "model": "permission"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "auth",
+    "model": "group"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "contenttypes",
+    "model": "contenttype"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "sessions",
+    "model": "session"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "stockapp",
+    "model": "categorie"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "stockapp",
+    "model": "commande"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "stockapp",
+    "model": "produit"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "stockapp",
+    "model": "mouvementstock"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "accounts",
+    "model": "customuser"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "intervention",
+    "model": "demandeintervention"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "intervention",
+    "model": "ordretravail"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "intervention",
+    "model": "rapportintervention"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "equipments",
+    "model": "equipment"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "equipments",
+    "model": "sousensemble"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "pannes",
+    "model": "panne"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "preventive",
+    "model": "preventivetask"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "preventive",
+    "model": "temperaturereading"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "dashboard_app",
+    "model": "dashboardpreference"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "dashboard_app",
+    "model": "usernotification"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add log entry",
+    "content_type": [
+      "admin",
+      "logentry"
+    ],
+    "codename": "add_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change log entry",
+    "content_type": [
+      "admin",
+      "logentry"
+    ],
+    "codename": "change_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete log entry",
+    "content_type": [
+      "admin",
+      "logentry"
+    ],
+    "codename": "delete_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view log entry",
+    "content_type": [
+      "admin",
+      "logentry"
+    ],
+    "codename": "view_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add permission",
+    "content_type": [
+      "auth",
+      "permission"
+    ],
+    "codename": "add_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change permission",
+    "content_type": [
+      "auth",
+      "permission"
+    ],
+    "codename": "change_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete permission",
+    "content_type": [
+      "auth",
+      "permission"
+    ],
+    "codename": "delete_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view permission",
+    "content_type": [
+      "auth",
+      "permission"
+    ],
+    "codename": "view_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add group",
+    "content_type": [
+      "auth",
+      "group"
+    ],
+    "codename": "add_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change group",
+    "content_type": [
+      "auth",
+      "group"
+    ],
+    "codename": "change_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete group",
+    "content_type": [
+      "auth",
+      "group"
+    ],
+    "codename": "delete_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view group",
+    "content_type": [
+      "auth",
+      "group"
+    ],
+    "codename": "view_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add content type",
+    "content_type": [
+      "contenttypes",
+      "contenttype"
+    ],
+    "codename": "add_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change content type",
+    "content_type": [
+      "contenttypes",
+      "contenttype"
+    ],
+    "codename": "change_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete content type",
+    "content_type": [
+      "contenttypes",
+      "contenttype"
+    ],
+    "codename": "delete_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view content type",
+    "content_type": [
+      "contenttypes",
+      "contenttype"
+    ],
+    "codename": "view_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add session",
+    "content_type": [
+      "sessions",
+      "session"
+    ],
+    "codename": "add_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change session",
+    "content_type": [
+      "sessions",
+      "session"
+    ],
+    "codename": "change_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete session",
+    "content_type": [
+      "sessions",
+      "session"
+    ],
+    "codename": "delete_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view session",
+    "content_type": [
+      "sessions",
+      "session"
+    ],
+    "codename": "view_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add categorie",
+    "content_type": [
+      "stockapp",
+      "categorie"
+    ],
+    "codename": "add_categorie"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change categorie",
+    "content_type": [
+      "stockapp",
+      "categorie"
+    ],
+    "codename": "change_categorie"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete categorie",
+    "content_type": [
+      "stockapp",
+      "categorie"
+    ],
+    "codename": "delete_categorie"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view categorie",
+    "content_type": [
+      "stockapp",
+      "categorie"
+    ],
+    "codename": "view_categorie"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add commande",
+    "content_type": [
+      "stockapp",
+      "commande"
+    ],
+    "codename": "add_commande"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change commande",
+    "content_type": [
+      "stockapp",
+      "commande"
+    ],
+    "codename": "change_commande"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete commande",
+    "content_type": [
+      "stockapp",
+      "commande"
+    ],
+    "codename": "delete_commande"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view commande",
+    "content_type": [
+      "stockapp",
+      "commande"
+    ],
+    "codename": "view_commande"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add produit",
+    "content_type": [
+      "stockapp",
+      "produit"
+    ],
+    "codename": "add_produit"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change produit",
+    "content_type": [
+      "stockapp",
+      "produit"
+    ],
+    "codename": "change_produit"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete produit",
+    "content_type": [
+      "stockapp",
+      "produit"
+    ],
+    "codename": "delete_produit"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view produit",
+    "content_type": [
+      "stockapp",
+      "produit"
+    ],
+    "codename": "view_produit"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add mouvement stock",
+    "content_type": [
+      "stockapp",
+      "mouvementstock"
+    ],
+    "codename": "add_mouvementstock"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change mouvement stock",
+    "content_type": [
+      "stockapp",
+      "mouvementstock"
+    ],
+    "codename": "change_mouvementstock"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete mouvement stock",
+    "content_type": [
+      "stockapp",
+      "mouvementstock"
+    ],
+    "codename": "delete_mouvementstock"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view mouvement stock",
+    "content_type": [
+      "stockapp",
+      "mouvementstock"
+    ],
+    "codename": "view_mouvementstock"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add user",
+    "content_type": [
+      "accounts",
+      "customuser"
+    ],
+    "codename": "add_customuser"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change user",
+    "content_type": [
+      "accounts",
+      "customuser"
+    ],
+    "codename": "change_customuser"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete user",
+    "content_type": [
+      "accounts",
+      "customuser"
+    ],
+    "codename": "delete_customuser"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view user",
+    "content_type": [
+      "accounts",
+      "customuser"
+    ],
+    "codename": "view_customuser"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add Demande d'intervention",
+    "content_type": [
+      "intervention",
+      "demandeintervention"
+    ],
+    "codename": "add_demandeintervention"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change Demande d'intervention",
+    "content_type": [
+      "intervention",
+      "demandeintervention"
+    ],
+    "codename": "change_demandeintervention"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete Demande d'intervention",
+    "content_type": [
+      "intervention",
+      "demandeintervention"
+    ],
+    "codename": "delete_demandeintervention"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view Demande d'intervention",
+    "content_type": [
+      "intervention",
+      "demandeintervention"
+    ],
+    "codename": "view_demandeintervention"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add Ordre de travail",
+    "content_type": [
+      "intervention",
+      "ordretravail"
+    ],
+    "codename": "add_ordretravail"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change Ordre de travail",
+    "content_type": [
+      "intervention",
+      "ordretravail"
+    ],
+    "codename": "change_ordretravail"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete Ordre de travail",
+    "content_type": [
+      "intervention",
+      "ordretravail"
+    ],
+    "codename": "delete_ordretravail"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view Ordre de travail",
+    "content_type": [
+      "intervention",
+      "ordretravail"
+    ],
+    "codename": "view_ordretravail"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add Rapport d'intervention",
+    "content_type": [
+      "intervention",
+      "rapportintervention"
+    ],
+    "codename": "add_rapportintervention"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change Rapport d'intervention",
+    "content_type": [
+      "intervention",
+      "rapportintervention"
+    ],
+    "codename": "change_rapportintervention"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete Rapport d'intervention",
+    "content_type": [
+      "intervention",
+      "rapportintervention"
+    ],
+    "codename": "delete_rapportintervention"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view Rapport d'intervention",
+    "content_type": [
+      "intervention",
+      "rapportintervention"
+    ],
+    "codename": "view_rapportintervention"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add ╔quipement",
+    "content_type": [
+      "equipments",
+      "equipment"
+    ],
+    "codename": "add_equipment"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change ╔quipement",
+    "content_type": [
+      "equipments",
+      "equipment"
+    ],
+    "codename": "change_equipment"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete ╔quipement",
+    "content_type": [
+      "equipments",
+      "equipment"
+    ],
+    "codename": "delete_equipment"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view ╔quipement",
+    "content_type": [
+      "equipments",
+      "equipment"
+    ],
+    "codename": "view_equipment"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add sous ensemble",
+    "content_type": [
+      "equipments",
+      "sousensemble"
+    ],
+    "codename": "add_sousensemble"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change sous ensemble",
+    "content_type": [
+      "equipments",
+      "sousensemble"
+    ],
+    "codename": "change_sousensemble"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete sous ensemble",
+    "content_type": [
+      "equipments",
+      "sousensemble"
+    ],
+    "codename": "delete_sousensemble"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view sous ensemble",
+    "content_type": [
+      "equipments",
+      "sousensemble"
+    ],
+    "codename": "view_sousensemble"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add Panne",
+    "content_type": [
+      "pannes",
+      "panne"
+    ],
+    "codename": "add_panne"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change Panne",
+    "content_type": [
+      "pannes",
+      "panne"
+    ],
+    "codename": "change_panne"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete Panne",
+    "content_type": [
+      "pannes",
+      "panne"
+    ],
+    "codename": "delete_panne"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view Panne",
+    "content_type": [
+      "pannes",
+      "panne"
+    ],
+    "codename": "view_panne"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add preventive task",
+    "content_type": [
+      "preventive",
+      "preventivetask"
+    ],
+    "codename": "add_preventivetask"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change preventive task",
+    "content_type": [
+      "preventive",
+      "preventivetask"
+    ],
+    "codename": "change_preventivetask"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete preventive task",
+    "content_type": [
+      "preventive",
+      "preventivetask"
+    ],
+    "codename": "delete_preventivetask"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view preventive task",
+    "content_type": [
+      "preventive",
+      "preventivetask"
+    ],
+    "codename": "view_preventivetask"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add RelevÚ de tempÚrature",
+    "content_type": [
+      "preventive",
+      "temperaturereading"
+    ],
+    "codename": "add_temperaturereading"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change RelevÚ de tempÚrature",
+    "content_type": [
+      "preventive",
+      "temperaturereading"
+    ],
+    "codename": "change_temperaturereading"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete RelevÚ de tempÚrature",
+    "content_type": [
+      "preventive",
+      "temperaturereading"
+    ],
+    "codename": "delete_temperaturereading"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view RelevÚ de tempÚrature",
+    "content_type": [
+      "preventive",
+      "temperaturereading"
+    ],
+    "codename": "view_temperaturereading"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add dashboard preference",
+    "content_type": [
+      "dashboard_app",
+      "dashboardpreference"
+    ],
+    "codename": "add_dashboardpreference"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change dashboard preference",
+    "content_type": [
+      "dashboard_app",
+      "dashboardpreference"
+    ],
+    "codename": "change_dashboardpreference"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete dashboard preference",
+    "content_type": [
+      "dashboard_app",
+      "dashboardpreference"
+    ],
+    "codename": "delete_dashboardpreference"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view dashboard preference",
+    "content_type": [
+      "dashboard_app",
+      "dashboardpreference"
+    ],
+    "codename": "view_dashboardpreference"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add user notification",
+    "content_type": [
+      "dashboard_app",
+      "usernotification"
+    ],
+    "codename": "add_usernotification"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change user notification",
+    "content_type": [
+      "dashboard_app",
+      "usernotification"
+    ],
+    "codename": "change_usernotification"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete user notification",
+    "content_type": [
+      "dashboard_app",
+      "usernotification"
+    ],
+    "codename": "delete_usernotification"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view user notification",
+    "content_type": [
+      "dashboard_app",
+      "usernotification"
+    ],
+    "codename": "view_usernotification"
+  }
+}
+]

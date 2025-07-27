@@ -1,0 +1,100 @@
+{% extends "pannes/base.html" %}
+{% load humanize %}
+
+{% block content %}
+<div class="container-fluid px-4">
+  <h1 class="mt-4"><i class="bi bi-bar-chart-line-fill me-2"></i>
+    Indicateurs des équipements</h1>
+
+  <!-- Formulaire de filtre -->
+  <form method="get" class="row g-3 mb-4">
+    <div class="col-auto">
+      {{ form.period.label_tag }}
+    </div>
+    <div class="col-auto">
+      {{ form.period }}
+    </div>
+    <div class="col-auto">
+      <button type="submit" class="btn btn-primary">
+        <i class="bi bi-filter-circle me-1"></i>Filtrer
+      </button>
+    </div>
+
+    <!-- Recherche par équipement ou site -->
+    <div class="row g-3">
+      <div class="col-md-4">
+        <label class="form-label">Rechercher (équipement ou site)</label>
+        <input type="search"
+              name="q"
+              value="{{ q }}"
+              class="form-control"
+              placeholder="Tapez un mot‑clé…">
+      </div>
+      <div class="col-auto align-self-end">
+        <button type="submit" class="btn btn-secondary">
+          <i class="bi bi-search me-1"></i> Rechercher
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <!-- Tableau des taux -->
+  <div class="card shadow mb-4">
+    <div class="card-body">
+      <p>
+        Taux calculé sur la période : 
+        <strong>
+          {% if period == 'week' %}7 derniers jours
+          {% elif period == 'year' %}365 derniers jours
+          {% else %}30 derniers jours
+          {% endif %}
+        </strong>
+      </p>
+      <div class="table-responsive">
+        <table class="table table-striped align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Équipement</th>
+              <th>Site</th>
+              <th class="text-end">Taux (λ)</th>
+              <th class="text-end">MTBF (jours)</th>
+              <th class="text-end">Fiabilité<br>R(t)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in rates %}
+            <tr>
+              <td>{{ item.equipment.designation }}</td>
+              <td>{{ item.equipment.get_site_display }}</td>
+              <td class="text-end">
+                {{ item.rate|floatformat:4 }}
+              </td>
+              <td class="text-end">
+                {% if item.mtbf %}
+                  {{ item.mtbf|floatformat:1 }}
+                {% else %}
+                  &mdash;
+                {% endif %}
+              </td>
+              <td class="text-end">
+                {% if item.reliability is not None %}
+                  {{ item.reliability|floatformat:3 }}
+                {% else %}
+                  &mdash;
+                {% endif %}
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="2" class="text-center text-muted py-3">
+                Aucun équipement trouvé.
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

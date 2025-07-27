@@ -1,0 +1,168 @@
+/* === Couleurs globales === */
+:root {
+    --primary-color: #0d6efd;
+    --primary-hover: #0b5ed7;
+    --accent-blue: #1e88e5;
+    --background-light: #f8f9fa;
+    --white: #ffffff;
+    --gray-border: #dee2e6;
+    --box-shadow-light: 0 0 20px rgba(0, 123, 255, 0.1);
+}
+
+/* === RESET === */
+body {
+    background-color: var(--background-light);
+    color: #212529;
+}
+
+/* === Containers === */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+/* === NAVBAR === */
+.navbar {
+    background-color: var(--white);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+}
+
+.logo {
+    height: 60px;
+    margin-right: 15px;
+}
+
+.nav-link {
+    color: var(--primary-color);
+    font-weight: 500;
+    margin-left: 10px;
+}
+
+.nav-link:hover {
+    color: var(--primary-hover);
+}
+
+/* === AUTH pages === */
+.auth-container {
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: var(--box-shadow-light);
+}
+
+.auth-header {
+    background-color: var(--primary-color);
+    color: var(--white);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 20px;
+    text-align: center;
+}
+
+/* === FORM === */
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+form select.form-select {
+    max-width: 400px;
+}
+
+form.row {
+    background: var(--white);
+    border: 1px solid var(--gray-border);
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+form.row label {
+    font-weight: 500;
+}
+
+form .btn-success {
+    padding: 0.6rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 4px;
+}
+
+/* === BOUTONS === */
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
+
+.btn-outline-danger {
+    margin-left: 10px;
+}
+
+.btn-outline-primary i,
+.btn-outline-secondary i,
+.btn-outline-danger i,
+.btn-success i {
+    margin-right: 4px;
+    vertical-align: middle;
+}
+
+/* === TITRES === */
+h2 i {
+    margin-right: 0.5rem;
+    color: var(--accent-blue);
+}
+
+/* === CHART.JS CANVAS === */
+canvas#chart {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    height: 500px;
+    background: var(--white);
+    padding: 1rem;
+    border: 1px solid var(--gray-border);
+    border-radius: 8px;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.05);
+    margin-top: 1rem;
+}
+
+/* === FOOTER === */
+.footer {
+    background-color: var(--primary-color);
+    color: var(--white);
+    padding: 20px 0;
+    margin-top: 40px;
+    text-align: center;
+}
+
+/* === MESSAGES & TEXTE === */
+.text-muted {
+    font-style: italic;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+    form.row {
+        flex-direction: column;
+    }
+
+    .col-md-3, .col-md-4 {
+        width: 100%;
+    }
+
+    form .btn {
+        width: 100%;
+        margin-top: 1rem;
+    }
+}

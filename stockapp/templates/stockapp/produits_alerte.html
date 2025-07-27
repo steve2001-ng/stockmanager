@@ -1,0 +1,32 @@
+{% extends "stockapp/base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2>Produits en Alerte de Stock</h2>
+    
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Produit</th>
+                <th>Quantité</th>
+                <th>Stock Alerte</th>
+                <th>Déficit</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for produit in produits %}
+            <tr class="table-danger">
+                <td>{{ produit.designation }}</td>
+                <td>{{ produit.quantite }}</td>
+                <td>{{ produit.stock_alerte }}</td>
+                <td>{{ produit.stock_alerte|subtract:produit.quantite }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">Aucun produit en alerte actuellement</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

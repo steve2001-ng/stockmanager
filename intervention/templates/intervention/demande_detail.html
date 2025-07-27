@@ -1,0 +1,154 @@
+{% extends 'intervention/base.html' %}
+
+{% block title %}Détail demande #{{ demande.id }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>Détail de la demande #{{ demande.id }}</h2>
+    </div>
+    <div class="card-body">
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <h4>Informations générales</h4>
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Équipement</th>
+                        <td>
+                            <a href="{{ demande.equipement.get_absolute_url }}">
+                                {{ demande.equipement.code }} - {{ demande.equipement.designation }}
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Site</th>
+                        <td>{{ demande.equipement.get_site_display }}</td>
+                    </tr>
+                    <tr>
+                        <th>Panne associée</th>
+                        <td>{{ demande.panne.intitule }} ({{ demande.panne.code_panne }})</td>
+                    </tr>
+                    <tr>
+                        <th>Niveau d'alerte</th>
+                        <td>
+                            <span class="badge bg-{% if demande.panne.niveau_alerte == 'critique' %}danger
+                            {% elif demande.panne.niveau_alerte == 'eleve' %}warning
+                            {% elif demande.panne.niveau_alerte == 'moyen' %}info
+                            {% else %}secondary{% endif %}">
+                                {{ demande.panne.get_niveau_alerte_display }}
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <h4>Statut de la demande</h4>
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Urgence</th>
+                        <td>
+                            <span class="badge bg-{% if demande.urgence == 'H' %}danger
+                            {% elif demande.urgence == 'M' %}warning
+                            {% else %}secondary{% endif %}">
+                                {{ demande.get_urgence_display }}
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Statut</th>
+                        <td>
+                            <span class="badge bg-{% if demande.statut == 'N' %}info
+                            {% elif demande.statut == 'E' %}primary
+                            {% elif demande.statut == 'T' %}success
+                            {% else %}secondary{% endif %}">
+                                {{ demande.get_statut_display }}
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Créée le</th>
+                        <td>{{ demande.date_creation|date:"d/m/Y H:i" }}</td>
+                    </tr>
+                    <tr>
+                        <th>Modifiée le</th>
+                        <td>{{ demande.date_modification|date:"d/m/Y H:i" }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+        <div class="mb-4">
+            <h4>Description</h4>
+            <div class="card">
+                <div class="card-body">
+                    {{ demande.description|linebreaks }}
+                </div>
+            </div>
+        </div>
+        
+        <div class="d-flex justify-content-between">
+            <a href="{% url 'intervention:demande_list' %}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Retour à la liste
+            </a>
+            <div>
+                <a href="{% url 'intervention:demande_update' demande.pk %}" class="btn btn-primary">
+                    <i class="bi bi-pencil"></i> Modifier
+                </a>
+                <a href="{% url 'intervention:ordre_create' %}?demande={{ demande.pk }}" class="btn btn-success">
+                    <i class="bi bi-wrench"></i> Créer un ordre de travail
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Section pour les ordres de travail liés -->
+<div class="card mt-4">
+    <div class="card-header">
+        <h3>Ordres de travail associés</h3>
+    </div>
+    <div class="card-body">
+        {% if demande.ordres.exists %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Date planifiée</th>
+                        <th>Équipe</th>
+                        <th>Sous-ensemble</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ordre in demande.ordres.all %}
+                    <tr>
+                        <td>{{ ordre.id }}</td>
+                        <td>{{ ordre.date_planifiee|date:"d/m/Y H:i" }}</td>
+                        <td>{{ ordre.equipe }}</td>
+                        <td>{{ ordre.sous_ensemble|default:"-" }}</td>
+                        <td>
+                            <span class="badge bg-{% if ordre.statut == 'P' %}info
+                            {% elif ordre.statut == 'E' %}primary
+                            {% elif ordre.statut == 'T' %}success
+                            {% else %}secondary{% endif %}">
+                                {{ ordre.get_statut_display }}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="{% url 'intervention:ordre_detail' ordre.pk %}" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-muted">Aucun ordre de travail associé à cette demande.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

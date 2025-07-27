@@ -1,0 +1,29 @@
+{% extends 'entrepots/base.html' %}
+{% block content %}
+<div class="container my-5">
+    <h2><i class="bi bi-eye"></i> Détails du site : {{ site.designation }}</h2>
+    <div class="card mt-4 p-4">
+        <p><strong>Ville :</strong> {{ site.ville }}</p>
+        <p><strong>Localisation :</strong> {{ site.localisation }}</p>
+        <p><strong>Responsable :</strong> {{ site.responsable }}</p>
+        <p><strong>Capacité Totale :</strong> {{ site.capacite_totale }} Tonnes</p>
+        <p><strong>Photo :</strong><br>
+            <img src="{{ site.photo.url }}" class="img-fluid rounded" style="max-width: 400px;">
+        </p>
+        {% if site.documentation %}
+            <p><strong>Documentation :</strong><br>
+                <a href="{{ site.documentation.url }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                    <i class="bi bi-eye"></i> Visualiser
+                </a>
+                <a href="{{ site.documentation.url }}" download class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-download"></i> Télécharger
+                </a>
+            </p>
+        {% endif %}
+        <a href="{% url 'consommation:consommation_par_site' %}?site={{ site.id }}" class="btn btn-outline-primary btn-sm">
+            <i class="bi bi-lightning"></i> Consommation
+        </a>
+        <a href="{% url 'entrepots:liste_sites' %}" class="btn btn-secondary mt-3">Retour</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,121 @@
+[
+{
+  "model": "stockapp.produit",
+  "pk": 7,
+  "fields": {
+    "date_maj": "2025-06-20T11:05:38.623Z",
+    "code": "FF_R404A",
+    "famille": "Fluide Frigorigène",
+    "designation": "R404A",
+    "fournisseur": "CALORIE FLUOR",
+    "caracteristiques": "Point d'ébullition à 1 atm (1,013 bar) : −46 °CGlissement de température sous 1,013 [bar] : 0,9 KTempérature critique : 72,07 °C (345,22 K)Pression critique : 3 731,5 kPaDensité critique : 484,5 kg·m-3Chaleur latente de vaporisation : 200,3 kJ/kgViscosité dynamique à 25 °C :Liquide : 0,126 8 mPa·sVapeur sous 1,013 [bar] : 0,012 mPa·sODP (Ozone Depleting Potential) : 0HGWP (Halocarbon Global Warming Potential) : 0,94",
+    "quantite": 5,
+    "stock_alerte": 4,
+    "categorie": 3,
+    "date_creation": "2025-06-20T11:05:05.386Z",
+    "image": "produits/R404A.jpg"
+  }
+},
+{
+  "model": "stockapp.produit",
+  "pk": 6,
+  "fields": {
+    "date_maj": "2025-06-20T11:02:05.023Z",
+    "code": "FF_R22",
+    "famille": "Fluide Frigorigène",
+    "designation": "R22",
+    "fournisseur": "KALTON",
+    "caracteristiques": "T° fusion\t−146 °C[1]\r\nT° ébullition\t−41 °C[1]\r\nSolubilité\tdans l'eau à 25 °C : 3 g·l-1[1]\r\nMasse volumique\t1,21 g·cm-3[1]\r\nT° d'auto-inflammation\t632 °C[1]\r\nPression de vapeur saturante\tà 20 °C : 908 kPa[1]\r\nPoint critique\t49,7 bar, 96,15 °C [3",
+    "quantite": 3,
+    "stock_alerte": 4,
+    "categorie": 3,
+    "date_creation": "2025-06-20T10:57:49.514Z",
+    "image": "produits/R22_742YjGo.jpg"
+  }
+},
+{
+  "model": "stockapp.produit",
+  "pk": 4,
+  "fields": {
+    "date_maj": "2025-06-16T11:53:55.421Z",
+    "code": "CE_RT_001",
+    "famille": "Relais Thermique",
+    "designation": "Tesys LRD - relais de protection thermique - 12..18A - classe 10A",
+    "fournisseur": "Fokou",
+    "caracteristiques": "12..18A - classe 10A",
+    "quantite": 23,
+    "stock_alerte": 2,
+    "categorie": 1,
+    "date_creation": "2025-05-27T20:25:42.458Z",
+    "image": "produits/Capture_décran_2025-05-27_212429.png"
+  }
+},
+{
+  "model": "stockapp.produit",
+  "pk": 3,
+  "fields": {
+    "date_maj": "2025-06-15T13:11:26.070Z",
+    "code": "CE_SE_001",
+    "famille": "Sectionneurs",
+    "designation": "Interrupteur sectionneur Interpact INS40 4P 400 A",
+    "fournisseur": "Fokou",
+    "caracteristiques": "4 pôles 400 A",
+    "quantite": 9,
+    "stock_alerte": 2,
+    "categorie": 1,
+    "date_creation": "2025-05-27T20:19:33.479Z",
+    "image": "produits/Capture_décran_2025-05-27_211816.png"
+  }
+},
+{
+  "model": "stockapp.produit",
+  "pk": 2,
+  "fields": {
+    "date_maj": "2025-06-13T12:13:47.728Z",
+    "code": "CE_CO_001",
+    "famille": "Contacteurs",
+    "designation": "Contacteur tétrapolaire",
+    "fournisseur": "Fokou",
+    "caracteristiques": "Marque : Schneider Electric  contacteur – 4P – AC-1 440V – 20A – bobine 230Vca.",
+    "quantite": 6,
+    "stock_alerte": 2,
+    "categorie": 1,
+    "date_creation": "2025-05-27T20:11:57.616Z",
+    "image": "produits/Capture_décran_2025-05-27_210925.png"
+  }
+},
+{
+  "model": "stockapp.produit",
+  "pk": 5,
+  "fields": {
+    "date_maj": "2025-06-13T10:18:53.975Z",
+    "code": "FF_R134A",
+    "famille": "Fluide Frigorigène",
+    "designation": "R134a",
+    "fournisseur": "FRAMACOLD",
+    "caracteristiques": "Point d’ébullition à 1 atm) °C -26.1\r\nPoint de congélation °C -103\r\nTempérature critique °C 101.1\r\nPression critique Bar abs 40.67",
+    "quantite": 10,
+    "stock_alerte": 3,
+    "categorie": 3,
+    "date_creation": "2025-06-13T10:18:53.975Z",
+    "image": "produits/images_g8bf27R.jpg"
+  }
+},
+{
+  "model": "stockapp.produit",
+  "pk": 1,
+  "fields": {
+    "date_maj": "2025-05-27T20:16:40.958Z",
+    "code": "CE_DD_001",
+    "famille": "Disjoncteurs différentiels",
+    "designation": "Disjoncteur différentiel modulaire",
+    "fournisseur": "Fokou",
+    "caracteristiques": "Phase - neutre32A, 30mA, 240 VAC",
+    "quantite": 1,
+    "stock_alerte": 2,
+    "categorie": 1,
+    "date_creation": "2025-05-27T19:54:06.884Z",
+    "image": "produits/disjoncteur-differentiel-nbh8le-1pn-01.jpg"
+  }
+}
+]

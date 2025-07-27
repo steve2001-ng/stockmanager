@@ -1,0 +1,253 @@
+{% extends 'equipments/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Gestion des Équipements</h2>
+
+    <div class="mb-4">
+        <form method="get" class="form-inline">
+            <div class="form-group mr-3">
+                <label for="family" class="mr-2">Filtrer par famille:</label>
+                <select name="family" id="family" class="form-control" onchange="this.form.submit()">
+                    <option value="">Tous</option>
+                    <option value="CF" {% if selected_family == 'CF' %}selected{% endif %}>Chambres Froides</option>
+                    <option value="CG" {% if selected_family == 'CG' %}selected{% endif %}>Congélateurs</option>
+                </select>
+            </div>
+            <a href="{% url 'equipments:equipment_create' %}" class="btn btn-primary">Ajouter un équipement</a>
+        </form>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered align-middle">
+            <thead class="table-custom-header text-white">
+                <tr>
+                    <th>Famille</th>
+                    <th>Sous-famille</th>
+                    <th>Code</th>
+                    <th>Désignation</th>
+                    <th>Capacité (T)</th>
+                    <th>Site</th>
+                    <th>Numéro</th>
+                    <th>Nbre groupes</th>
+                    <th>Puissance/groupe</th>
+                    <th>Constructeur</th>
+                    <th>T° consigne</th>
+                    <th>Statut</th>
+                    <th>Mise en service</th>
+                    <th>Doc</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for equipment in equipments %}
+                <tr class="equipment-row" data-code="{{ equipment.code }}">
+                    <td>{{ equipment.get_family_display }}</td>
+                    <td>{{ equipment.sub_family }}</td>
+                    <td>{{ equipment.code }}</td>
+                    <td>{{ equipment.designation }}</td>
+                    <td>{{ equipment.capacity }}</td>
+                    <td>{{ equipment.site }}</td>
+                    <td>{{ equipment.number }}</td>
+                    <td>{{ equipment.group_count }}</td>
+                    <td>{{ equipment.power_per_group }}</td>
+                    <td>{{ equipment.manufacturer }}</td>
+                    <td>{{ equipment.temperature_setpoint }}</td>
+                    <td>{{ equipment.get_status_display }}</td>
+                    <td>{{ equipment.commissioning_date }}</td>
+                    <td>
+                        {% if equipment.documentation %}
+                            <a href="{{ equipment.documentation.url }}" target="_blank">Télécharger</a>
+                        {% else %}-{% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'equipments:equipment_update' equipment.code %}" class="btn btn-sm btn-warning">
+                            <i class="bi bi-pencil-square"></i> Modifier
+                        </a>
+                        <a href="{% url 'equipments:equipment_delete' equipment.code %}" class="btn btn-sm btn-danger">
+                            <i class="bi bi-trash"></i> Supprimer
+                        </a>
+                        <a href="{% url 'equipments:equipment_detail' equipment.code %}" class="btn btn-sm btn-info">Détails</a>
+                        <a href="{% url 'equipments:equipment_tree_html' equipment.code %}" class="btn btn-sm btn-outline-primary">Arborescence</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="15" class="text-center text-muted">Aucun équipement trouvé</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal arborescence -->
+<div class="modal fade" id="arborescenceModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Arborescence</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="tree-container"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btn-add-node">
+                    <i class="bi bi-plus-circle"></i> Ajouter un sous-ensemble
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+    let equipementCode = "";
+
+    $(document).ready(function() {
+        $('table tbody tr').on('click', function(e) {
+            if ($(e.target).is('a, button')) return;
+            equipementCode = $(this).data('code');
+
+            $.get(`/equipments/${equipementCode}/arborescence/`, function(data) {
+                $('#arborescenceModal .modal-title').text(`Arborescence - ${data.equipement.code} : ${data.equipement.designation}`);
+                renderTree(data.arborescence);
+                $('#arborescenceModal').modal('show');
+            }).fail(function() {
+                alert("Erreur de chargement de l'arborescence.");
+            });
+        });
+
+        $('#btn-add-node').click(function() {
+            if (equipementCode) {
+                window.location.href = `/equipments/sous-ensemble/new/${equipementCode}/`;
+            }
+        });
+
+        function renderTree(nodes, parentElement = $('#tree-container')) {
+            parentElement.empty();
+            const ul = $('<ul class="tree"></ul>');
+
+            nodes.forEach(node => {
+                const li = $('<li></li>');
+                const nodeDiv = $(`
+                    <div class="node d-flex align-items-center justify-content-between">
+                        <div>
+                            <strong>${node.type}</strong> - 
+                            <span class="text-primary">${node.code}</span> : 
+                            ${node.designation}
+                            ${node.caracteristiques ? `<div class="small text-muted mt-1">${node.caracteristiques}</div>` : ''}
+                        </div>
+                        <div class="btn-group btn-group-sm">
+                            <button class="btn btn-outline-secondary edit-node" data-id="${node.id}">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-outline-danger delete-node" data-id="${node.id}">🗑️</button>
+                        </div>
+                    </div>
+                `);
+
+                li.append(nodeDiv);
+
+                if (node.image_url) {
+                    li.append(`<img src="${node.image_url}" class="img-thumbnail mt-2" style="max-width: 150px;">`);
+                }
+
+                if (node.enfants && node.enfants.length > 0) {
+                    const childrenUl = $('<ul class="subtree"></ul>');
+                    renderTree(node.enfants, childrenUl);
+                    li.append(childrenUl);
+                }
+
+                ul.append(li);
+            });
+
+            parentElement.append(ul);
+        }
+
+        $(document).on('click', '.edit-node', function(e) {
+            const nodeId = $(this).data('id');
+            window.location.href = `/equipments/sous-ensemble/${nodeId}/`;
+        });
+
+        // Gestion du clic Ajouter sous-ensemble
+        $(document).on('click', '.add-node', function() {
+            const parentId = $(this).data('id');
+            window.location.href = `/equipments/sous-ensemble/new/?parent=${parentId}`;
+        });
+
+        // Gestion du clic Supprimer sous-ensemble
+        $(document).on('click', '.delete-node', function() {
+            const nodeId = $(this).data('id');
+            if (confirm("Êtes-vous sûr de vouloir supprimer cet élément ? Cette action est irréversible.")) {
+                deleteSubEquipment(nodeId);
+            }
+        });
+
+        function deleteSubEquipment(nodeId) {
+            const deleteUrl = `/equipments/sous-ensemble/${nodeId}/delete/`;
+
+            $.ajax({
+                url: deleteUrl,
+                type: 'POST',
+                headers: { 'X-CSRFToken': getCookie('csrftoken') },
+                success: function() {
+                    alert("L'élément a été supprimé avec succès.");
+                    // Recharge l'arborescence après suppression
+                    $.get(`/equipments/${equipementCode}/arborescence/`, function(data) {
+                        renderTree(data.arborescence);
+                    });
+                },
+                error: function(xhr) {
+                    alert("Erreur lors de la suppression : " + xhr.responseText);
+                }
+            });
+        }
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.startsWith(name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    });
+</script>
+
+<style>
+.table-custom-header {
+    background-color: #0d6efd;
+    font-weight: 600;
+    text-align: center;
+}
+.tree, .subtree {
+    list-style: none;
+    padding-left: 20px;
+}
+.node {
+    background: #f8f9fa;
+    padding: 10px;
+    margin: 5px 0;
+    border-left: 4px solid #0d6efd;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.caracteristiques {
+    margin-top: 5px;
+    padding: 10px;
+    background-color: #f0f4f8;
+    border-radius: 4px;
+}
+</style>
+{% endblock %}

@@ -1,0 +1,241 @@
+{% extends 'intervention/base.html' %}
+
+{% block title %}Statistiques des interventions{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>Statistiques des interventions</h2>
+    </div>
+    <div class="card-body">
+        <form method="get" class="row g-3 mb-4">
+            <div class="col-md-3">
+                <label for="start_date" class="form-label">Date de début</label>
+                <input type="date" class="form-control" id="start_date" name="start_date" value="{{ stats.start_date }}">
+            </div>
+            <div class="col-md-3">
+                <label for="end_date" class="form-label">Date de fin</label>
+                <input type="date" class="form-control" id="end_date" name="end_date" value="{{ stats.end_date }}">
+            </div>
+            <div class="col-md-2 align-self-end">
+                <button type="submit" class="btn btn-primary">Filtrer</button>
+            </div>
+        </form>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">Synthèse globale</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card bg-light mb-3">
+                                    <div class="card-body text-center">
+                                        <h5 class="card-title">{{ stats.total_demandes }}</h5>
+                                        <p class="card-text">Demandes</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card bg-light mb-3">
+                                    <div class="card-body text-center">
+                                        <h5 class="card-title">{{ stats.total_ordres }}</h5>
+                                        <p class="card-text">Ordres de travail</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card bg-light mb-3">
+                                    <div class="card-body text-center">
+                                        <h5 class="card-title">{{ stats.total_rapports }}</h5>
+                                        <p class="card-text">Rapports</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card bg-light mb-3">
+                                    <div class="card-body text-center">
+                                        <h5 class="card-title">
+                                            {% widthratio stats.rapports_par_statut.0.count stats.total_rapports 100 %}%
+                                        </h5>
+                                        <p class="card-text">Taux de réussite</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header bg-info text-white">
+                        <h4 class="mb-0">Répartition par statut</h4>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="statusChart" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0">Évolution mensuelle</h4>
+            </div>
+            <div class="card-body">
+                <canvas id="monthlyChart" height="300"></canvas>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header bg-warning text-dark">
+                <h4 class="mb-0">Performance par site</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Site</th>
+                                <th>Demandes</th>
+                                <th>Terminées</th>
+                                <th>En cours</th>
+                                <th>Taux</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for site in stats.stats_site %}
+                            <tr>
+                                <td>{{ site.equipement__site }}</td>
+                                <td>{{ site.count }}</td>
+                                <td>{{ site.completed }}</td>
+                                <td>{{ site.in_progress }}</td>
+                                <td>{% widthratio site.completed site.count 100 %}%</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Préparation des données pour le graphique des statuts
+    const statusLabels = [
+        {% for statut in stats.rapports_par_statut %}
+            '{{ statut.statut }}'{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ];
+    
+    const statusCounts = [
+        {% for statut in stats.rapports_par_statut %}
+            {{ statut.count }}{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ];
+
+    // Préparation des données pour le graphique mensuel
+    const monthlyLabels = [
+        {% for month in stats.monthly_data %}
+            '{{ month.month|date:"M Y" }}'{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ];
+    
+    const monthlyDemandes = [
+        {% for month in stats.monthly_data %}
+            {{ month.count|default:0 }}{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ];
+    
+    const monthlyCompleted = [
+        {% for month in stats.monthly_data %}
+            {{ month.completed|default:0 }}{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ];
+
+    // Graphique des statuts (camembert)
+    const statusCtx = document.getElementById('statusChart');
+    if (statusCtx) {
+        new Chart(statusCtx, {
+            type: 'doughnut',
+            data: {
+                labels: statusLabels,
+                datasets: [{
+                    data: statusCounts,
+                    backgroundColor: [
+                        '#28a745', // Succès
+                        '#dc3545', // Échec
+                        '#ffc107', // Reporté
+                        '#17a2b8'  // Autre
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'right'
+                    }
+                }
+            }
+        });
+    }
+
+    // Graphique d'évolution mensuelle (ligne)
+    const monthlyCtx = document.getElementById('monthlyChart');
+    if (monthlyCtx) {
+        new Chart(monthlyCtx, {
+            type: 'line',
+            data: {
+                labels: monthlyLabels,
+                datasets: [
+                    {
+                        label: 'Demandes',
+                        data: monthlyDemandes,
+                        borderColor: '#007bff',
+                        backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                        tension: 0.1,
+                        fill: true
+                    },
+                    {
+                        label: 'Terminées',
+                        data: monthlyCompleted,
+                        borderColor: '#28a745',
+                        backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                        tension: 0.1,
+                        fill: true
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: "Nombre d'interventions"
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Mois'
+                        }
+                    }
+                }
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

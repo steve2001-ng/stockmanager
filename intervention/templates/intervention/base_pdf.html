@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}Rapport d'intervention{% endblock %}</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 1cm;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+        }
+        h1, h2, h3, h4 {
+            color: #333;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .table th, .table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        .table th {
+            background-color: #f2f2f2;
+            text-align: left;
+        }
+        .border {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .p-3 {
+            padding: 1rem;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .signature {
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+            <div>
+                <img src="/media/logo.png" alt="Logo" style="height: 50px;">
+            </div>
+            <div style="text-align: right;">
+                <h3 style="margin: 0;">Rapport d'intervention</h3>
+                <p style="margin: 0;">Date: {% now "d/m/Y" %}</p>
+            </div>
+        </div>
+    </header>
+
+    {% block content %}{% endblock %}
+
+    <footer style="margin-top: 50px; font-size: 10px; text-align: center;">
+        Document généré le {% now "d/m/Y H:i" %} - Page <pdf:pagenumber> sur <pdf:pagecount>
+    </footer>
+</body>
+</html>

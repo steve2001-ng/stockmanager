@@ -1,0 +1,21 @@
+{% extends 'accounts/base_personnel.html' %}
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-dark text-white">
+            <h3>Accès Admin</h3>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="admin_password" class="form-label">Mot de passe Admin</label>
+                    <input type="password" class="form-control" id="admin_password" 
+                           name="admin_password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Accéder</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

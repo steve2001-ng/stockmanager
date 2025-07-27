@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        /* Orientation paysage et taille A4 */
+        @page {
+            size: A4 landscape;
+            margin: 1cm;
+        }
+        body {
+            font-family: DejaVu Sans, sans-serif;
+            font-size: 12px;
+            margin: 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1em;
+        }
+        th, td {
+            border: 1px solid #333;
+            padding: 4px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background: #ccc;
+        }
+        h2, p {
+            margin: 0 0 0.5em 0;
+        }
+    </style>
+</head>
+<body>
+    <h2>Historique des pannes — {{ period|title }}</h2>
+    <p>Généré le {{ generated_on|date:"d/m/Y H:i" }}</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Intitulé</th>
+                <th>Création</th>
+                <th>Résolue</th>
+                <th>Site</th>
+                <th>Équipement</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in pannes %}
+            <tr>
+                <td>{{ p.code_panne }}</td>
+                <td>{{ p.intitule }}</td>
+                <td>{{ p.date_creation|date:"d/m/Y H:i" }}</td>
+                <td>{% if p.resolue %}Oui{% else %}Non{% endif %}</td>
+                <td>{{ p.site }}</td>
+                <td>{{ p.equipement.designation }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

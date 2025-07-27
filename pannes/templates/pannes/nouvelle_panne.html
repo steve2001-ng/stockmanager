@@ -1,0 +1,136 @@
+{% extends 'pannes/base.html' %}
+{% load static %}
+
+{% block title %}{% if form.instance.pk %}Modifier{% else %}Nouvelle{% endif %} Panne{% endblock %}
+
+{% block content %}
+<div class="card shadow">
+    <div class="card-header bg-{% if form.instance.pk %}warning{% else %}success{% endif %} text-white">
+        <h3 class="mb-0">
+            <i class="fas fa-{% if form.instance.pk %}edit{% else %}plus-circle{% endif %} me-2"></i>
+            {% if form.instance.pk %}Modifier{% else %}Nouvelle{% endif %} Panne
+        </h3>
+    </div>
+    
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label for="{{ form.intitule.id_for_label }}" class="form-label">
+                            <i class="fas fa-heading me-2"></i>{{ form.intitule.label }}
+                        </label>
+                        {{ form.intitule }}
+                        {% if form.intitule.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.intitule.errors.as_text }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label for="{{ form.niveau_alerte.id_for_label }}" class="form-label">
+                            <i class="fas fa-exclamation-triangle me-2"></i>{{ form.niveau_alerte.label }}
+                        </label>
+                        {{ form.niveau_alerte }}
+                        {% if form.niveau_alerte.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.niveau_alerte.errors.as_text }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label for="{{ form.emetteur.id_for_label }}" class="form-label">
+                            <i class="fas fa-user me-2"></i>{{ form.emetteur.label }}
+                        </label>
+                        {{ form.emetteur }}
+                        {% if form.emetteur.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.emetteur.errors.as_text }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label for="{{ form.equipement.id_for_label }}" class="form-label">
+                            <i class="fas fa-desktop me-2"></i>{{ form.equipement.label }}
+                        </label>
+                        {{ form.equipement }}
+                        {% if form.equipement.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.equipement.errors.as_text }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label for="{{ form.site.id_for_label }}" class="form-label">
+                            <i class="fas fa-map-marker-alt me-2"></i>{{ form.site.label }}
+                        </label>
+                        {{ form.site }}
+                        {% if form.site.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.site.errors.as_text }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label for="{{ form.date_heure_panne.id_for_label }}" class="form-label">
+                            <i class="fas fa-calendar-alt me-2"></i>{{ form.date_heure_panne.label }}
+                        </label>
+                        {{ form.date_heure_panne }}
+                        {% if form.date_heure_panne.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.date_heure_panne.errors.as_text }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group mb-4">
+                <label for="{{ form.description.id_for_label }}" class="form-label">
+                    <i class="fas fa-align-left me-2"></i>{{ form.description.label }}
+                </label>
+                {{ form.description }}
+                {% if form.description.errors %}
+                <div class="invalid-feedback d-block">
+                    {{ form.description.errors.as_text }}
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="d-flex justify-content-between">
+                <a href="{% url 'pannes:liste_pannes' %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left me-1"></i> Retour
+                </a>
+                <button type="submit" class="btn btn-{% if form.instance.pk %}warning{% else %}success{% endif %}">
+                    <i class="fas fa-save me-1"></i> Enregistrer
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Initialisation des sélecteurs et datepickers si nécessaire
+    $(document).ready(function(){
+        $('select').select2({
+            theme: 'bootstrap-5'
+        });
+        
+        // Initialisation du datetime picker
+        $('#id_date_heure_panne').datetimepicker({
+            format: 'Y-m-d H:i',
+        });
+    });
+</script>
+{% endblock %}

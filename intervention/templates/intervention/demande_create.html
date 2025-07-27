@@ -1,0 +1,164 @@
+{% extends 'intervention/base.html' %}
+{% load static %}
+
+{% block title %}Nouvelle demande d'intervention{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-primary">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">
+                        <i class="bi bi-clipboard-plus me-2"></i>
+                        Nouvelle demande d'intervention
+                    </h3>
+                    
+                </div>
+                
+                <div class="card-body">
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        <!-- Panne Field -->
+                        <div class="mb-4">
+                            <label for="id_panne" class="form-label">
+                                <i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>
+                                Panne associée
+                                <a href="{% url 'pannes:nouvelle_panne' %}" class="btn btn-outline-secondary ms-3">
+                                <i class="fas fa-plus-circle me-1"></i> Nouvelle Panne
+                                </a>
+                            </label>
+                            <select class="form-select form-select-lg" id="id_panne" name="panne" required>
+                                <option value="" selected disabled>
+                                    <i class="bi bi-search me-2"></i>
+                                    Sélectionnez une panne...
+                                </option>
+                                {% for panne in pannes_non_resolues %}
+                                <option value="{{ panne.id }}">
+                                    <i class="bi bi-bug-fill me-2"></i>
+                                    {{ panne.code_panne }} - {{ panne.intitule }}
+                                    <span class="text-muted ms-2">({{ panne.equipement.code }})</span>
+                                </option>
+                                {% empty %}
+                                <option disabled>Aucune panne non résolue disponible</option>
+                                {% endfor %}
+                            </select>
+                            <div class="form-text">
+                                <i class="bi bi-info-circle me-1"></i>
+                                Liste des pannes non résolues 
+                            </div>
+                        </div>
+                        
+                        <!-- Equipement Field -->
+                        <div class="mb-4">
+                            <label class="form-label">
+                                <i class="bi bi-pc-display text-primary me-2"></i>
+                                Équipement concerné
+                            </label>
+                            <div class="p-3 bg-light rounded d-flex align-items-center" id="equipementDisplay">
+                                <i class="bi bi-question-circle-fill text-secondary me-3 fs-4"></i>
+                                <span>Sélectionnez d'abord une panne</span>
+                            </div>
+                            <input type="hidden" name="equipement" id="id_equipement" value="">
+                        </div>
+                        
+                        <!-- Urgence Field -->
+                        <div class="mb-4">
+                            <label for="id_urgence" class="form-label">
+                                <i class="bi bi-exclamation-octagon-fill text-danger me-2"></i>
+                                Niveau d'urgence
+                            </label>
+                            <select class="form-select form-select-lg" id="id_urgence" name="urgence">
+                                <option value="B">
+                                    <i class="bi bi-arrow-down-circle text-success me-2"></i>
+                                    Basse
+                                </option>
+                                <option value="M" selected>
+                                    <i class="bi bi-dash-circle text-warning me-2"></i>
+                                    Moyenne
+                                </option>
+                                <option value="H">
+                                    <i class="bi bi-exclamation-circle-fill text-danger me-2"></i>
+                                    Haute
+                                </option>
+                            </select>
+                        </div>
+                        
+                        <!-- Description Field -->
+                        <div class="mb-4">
+                            <label for="id_description" class="form-label">
+                                <i class="bi bi-card-text text-info me-2"></i>
+                                Description détaillée
+                            </label>
+                            <textarea class="form-control" id="id_description" name="description" rows="5" required></textarea>
+                            <div class="form-text">
+                                <i class="bi bi-pencil-square me-1"></i>
+                                Décrivez précisément le problème et les symptômes observés
+                            </div>
+                        </div>
+                        
+                        <!-- Form Actions -->
+                        <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+                            <a href="{% url 'intervention:demande_list' %}" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-circle me-2"></i>
+                                Annuler
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check2-circle me-2"></i>
+                                Enregistrer la demande
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Update equipment display when panne is selected
+    const panneSelect = document.getElementById('id_panne');
+    const equipDisplay = document.getElementById('equipementDisplay');
+    const equipementInput = document.getElementById('id_equipement');
+    
+    panneSelect.addEventListener('change', function() {
+        if (this.value) {
+            fetch(`/api/get-panne-details/${this.value}/`)
+                .then(response => {
+                    if (!response.ok) throw new Error('Erreur réseau');
+                    return response.json();
+                })
+                .then(data => {
+                    equipDisplay.innerHTML = `
+                        <i class="bi bi-pc-display-horizontal text-primary me-3 fs-4"></i>
+                        <div>
+                            <strong>${data.equipement_code}</strong> - ${data.equipement_designation}
+                            <div class="text-muted small mt-1">
+                                <i class="bi bi-geo-alt"></i> ${data.equipement_site}
+                            </div>
+                        </div>
+                    `;
+                    equipementInput.value = data.equipement_id;
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    equipDisplay.innerHTML = `
+                        <i class="bi bi-exclamation-triangle-fill text-danger me-3 fs-4"></i>
+                        <span>Erreur de chargement</span>
+                    `;
+                });
+        } else {
+            equipDisplay.innerHTML = `
+                <i class="bi bi-question-circle-fill text-secondary me-3 fs-4"></i>
+                <span>Sélectionnez d'abord une panne</span>
+            `;
+            equipementInput.value = '';
+        }
+    });
+});
+</script>
+{% endblock %}

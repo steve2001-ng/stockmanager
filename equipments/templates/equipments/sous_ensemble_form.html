@@ -1,0 +1,89 @@
+{% extends 'equipments/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>
+        {% if editing %}Modifier{% else %}Créer{% endif %} un sous-ensemble
+        <small class="text-muted">pour {{ equipement.code }}</small>
+    </h2>
+    
+    <form method="post" id="sousEnsembleForm" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="row mb-3">
+            <div class="col-md-6">
+                {{ form.type.label_tag }}
+                {{ form.type }}
+                {% if form.type.errors %}
+                <div class="invalid-feedback d-block">
+                    {{ form.type.errors }}
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="col-md-6">
+                {{ form.parent.label_tag }}
+                {{ form.parent }}
+                {% if form.parent.errors %}
+                <div class="invalid-feedback d-block">
+                    {{ form.parent.errors }}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="row mb-3">
+            <div class="col-md-6">
+                {{ form.code.label_tag }}
+                {{ form.code }}
+                {% if form.code.errors %}
+                <div class="invalid-feedback d-block">
+                    {{ form.code.errors }}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="mb-3">
+            {{ form.designation.label_tag }}
+            {{ form.designation }}
+            {% if form.designation.errors %}
+            <div class="invalid-feedback d-block">
+                {{ form.designation.errors }}
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="mb-3">
+            {{ form.caracteristiques.label_tag }}
+            {{ form.caracteristiques }}
+            <small class="form-text text-muted">
+                Entrez les caractéristiques au format JSON (ex: {"puissance": "10kW", "fluide": "R404A"})
+            </small>
+            {% if form.caracteristiques.errors %}
+            <div class="invalid-feedback d-block">
+                {{ form.caracteristiques.errors }}
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="mb-3">
+            {{ form.image.label_tag }}
+            {{ form.image }}
+            {% if form.image.errors %}
+            <div class="invalid-feedback d-block">
+                {{ form.image.errors }}
+            </div>
+            {% endif %}
+        </div>
+        
+        <button type="submit" class="btn btn-primary">
+            <i class="bi bi-check-circle"></i> Enregistrer
+        </button>
+        <a href="{% url 'equipments:equipment_list' %}" class="btn btn-secondary">
+            <i class="bi bi-x-circle"></i> Annuler
+        </a>
+    </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'equipments/base.html' %}
+
+{% block content %}
+<a href="{% url 'equipments:sous_ensemble_create' equipement_pk=equipement.code %}" 
+   class="btn btn-success mb-3">
+   ➕ Ajouter un sous-ensemble racine
+</a>
+<div class="container mt-4">
+    <h2>Arborescence de l'équipement : {{ equipement.designation }} ({{ equipement.code }})</h2>
+    
+    <ul>
+        {% for node in arborescence %}
+            {% include 'equipments/tree_node.html' with node=node %}
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

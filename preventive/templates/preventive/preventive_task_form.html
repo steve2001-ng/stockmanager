@@ -1,0 +1,70 @@
+{% extends "preventive/base.html" %}
+{% load static %}
+{% load preventive_tags %}
+
+{% block content %}
+<div class="container">
+    <div class="card shadow-lg mt-4">
+        <div class="card-header bg-primary text-white">
+            <h3 class="card-title mb-0">
+                <i class="fas fa-tools me-2"></i>
+                {% if object is not None %}Modifier{% else %}Créer{% endif %} une Tâche Préventive
+            </h3>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            {{ form.equipment }}
+                            <label for="{{ form.equipment.id_for_label }}">Équipement</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            {{ form.task_type }}
+                            <label for="{{ form.task_type.id_for_label }}">Type de tâche</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-floating mb-3">
+                    {{ form.description }}
+                    <label for="{{ form.description.id_for_label }}">Description</label>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <div class="form-floating">
+                            {{ form.frequency_days }}
+                            <label for="{{ form.frequency_days.id_for_label }}">Fréquence (jours)</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-floating">
+                            {{ form.last_performed }}
+                            <label for="{{ form.last_performed.id_for_label }}">Dernière réalisation</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-floating">
+                            {{ form.next_due }}
+                            <label for="{{ form.next_due.id_for_label }}">Prochaine échéance</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="d-flex justify-content-between">
+                    <a href="{% url 'preventive:preventive_tasks' %}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-1"></i> Annuler
+                    </a>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-save me-1"></i> Enregistrer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,165 @@
+{% extends "consommation/base.html" %}
+{% load humanize %}
+{% load custom_filters %}
+
+{% block content %}
+
+<div class="container my-5">
+    <h2><i class="bi bi-lightning-charge"></i> Consommation Électrique Mensuelle</h2>
+
+    {% if form.errors %}
+        <div class="alert alert-danger">
+            {{ form.errors }}
+        </div>
+    {% endif %}
+
+    <!-- Sélection du site -->
+    <form method="get" class="mb-4">
+        <label for="site-select" class="form-label">Sélectionner un site :</label>
+        <select name="site" id="site-select" class="form-select w-50" onchange="this.form.submit()">
+            <option value="">-- Choisir --</option>
+            {% for site in sites %}
+                <option value="{{ site.id }}" {% if site_selectionne and site.id == site_selectionne.id %}selected{% endif %}>
+                    {{ site.designation }}
+                </option>
+            {% endfor %}
+        </select>
+    </form>
+
+    {% if site_selectionne %}
+        <!-- Formulaire d'ajout -->
+        <h4 class="mt-4">Ajouter une consommation pour <strong>{{ site_selectionne.designation }}</strong></h4>
+        <form method="post" class="row g-3 mb-4">
+            {% csrf_token %}
+            <div class="col-md-3">
+                <label class="form-label">{{ form.mois.label }}</label>
+                {{ form.mois }}
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">{{ form.montant.label }}</label>
+                {{ form.montant }}
+            </div>
+            <div class="col-md-3 d-flex align-items-end">
+                <button type="submit" class="btn btn-success w-100">
+                    <i class="bi bi-plus-circle"></i> Ajouter
+                </button>
+            </div>
+            <a href="{% url 'entrepots:voir_site' site_selectionne.id %}" class="btn btn-outline-secondary mb-3">
+                <i class="bi bi-house-door"></i> Voir l'entrepôt
+            </a>
+        </form>
+
+        <!-- Graphique + Tableau -->
+        {% if consommations %}
+            <div style="height: 500px;">
+                <canvas id="chart"></canvas>
+            </div>
+
+            <div class="table-responsive mt-4">
+                <h4><i class="bi bi-table"></i> Détail des montants par mois</h4>
+                <table class="table table-bordered table-striped align-middle bg-white">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>Mois</th>
+                            <th>Montant (FCFA)</th>
+                            <th>Variations</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% with max_val=values|max %}
+                        {% for c in consommations %}
+                        <tr>
+                            <td>{{ c.mois|date:"F Y" }}</td>
+                            <td class="{% if c.montant == max_val %}text-danger fw-bold{% endif %}">
+                                {{ c.montant|floatformat:0|intcomma }} FCFA
+                            </td>
+                            <td>
+                                {% if forloop.first %}
+                                    <span class="text-muted">–</span>
+                                {% else %}
+                                    {% with prev=values|prev_value:forloop.counter0 %}
+                                        {% with diff=c.montant|diff:prev %}
+                                            {% if diff > 0 %}
+                                                <span class="text-success fw-bold">+{{ diff|floatformat:0|intcomma }} FCFA ↑</span>
+                                            {% elif diff < 0 %}
+                                                <span class="text-danger fw-bold">{{ diff|floatformat:0|intcomma }} FCFA ↓</span>
+                                            {% else %}
+                                                <span class="text-muted">Stable</span>
+                                            {% endif %}
+                                        {% endwith %}
+                                    {% endwith %}
+                                {% endif %}
+                            </td>
+                            <td>
+                                <!-- Modifier -->
+                                <a href="{% url 'consommation:modifier_consommation' c.id %}" class="btn btn-sm btn-outline-warning">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+
+                                <!-- Supprimer -->
+                                <a href="{% url 'consommation:supprimer_consommation' c.id %}"
+                                   class="btn btn-sm btn-outline-danger"
+                                   onclick="return confirm('❗ Voulez-vous vraiment supprimer cette consommation ?');">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% endwith %}
+                    </tbody>    
+                </table>
+            </div>
+        {% else %}
+            <p class="text-muted mt-3">Aucune donnée pour ce site.</p>
+        {% endif %}
+    {% endif %}
+</div>
+
+<!-- Graphique Chart.js -->
+{% if consommations %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const labels = {{ labels|safe }};
+    const data = {{ values|safe }};
+    const maxVal = Math.max(...data);
+
+    // Couleurs des points : rouge pour le max, bleu pour les autres
+    const pointColors = data.map(val => val === maxVal ? 'red' : '#1e88e5');
+
+    const ctx = document.getElementById('chart').getContext('2d');
+    const chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Montant (FCFA)',
+                data: data,
+                fill: false,
+                borderColor: '#1e88e5',
+                pointBackgroundColor: pointColors,
+                tension: 0.2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: true }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return value.toLocaleString('fr-FR') + ' FCFA';
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
+{% endif %}
+
+{% endblock %}

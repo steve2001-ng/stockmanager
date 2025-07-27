@@ -1,0 +1,50 @@
+{% extends 'stockapp/base.html' %}
+{% block title %}Historique des mouvements - {{ categorie.nom }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Historique des mouvements - {{ categorie.nom }}
+        <a href="{% url 'stockapp:historique_mouvements_pdf' categorie.id %}" 
+        class="btn btn-outline-secondary btn-sm" 
+        target="_blank">
+            <i class="fas fa-file-pdf"></i> Télécharger historique mouvements PDF
+        </a>
+    </h1>
+    <a href="{% url 'stockapp:produits_categorie' categorie.id %}" class="btn btn-secondary mb-3">
+        <i class="fas fa-arrow-left"></i> Retour
+    </a>
+
+    <table class="product-table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Produit</th>
+                <th>Type</th>
+                <th>Quantité</th>
+                <th>Motif</th>
+                <th>Effectué par</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for mouvement in mouvements %}
+            <tr>
+                <td>{{ mouvement.date|date:"d/m/Y H:i" }}</td>
+                <td>{{ mouvement.produit.designation }}</td>
+                <td>
+                    <span class="status-badge {{ mouvement.type }}">
+                        {{ mouvement.get_type_display }}
+                    </span>
+                </td>
+                <td>{{ mouvement.quantite }}</td>
+                <td>{{ mouvement.motif }}</td>
+                <td>{{ mouvement.effectue_par }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center">Aucun mouvement enregistré.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

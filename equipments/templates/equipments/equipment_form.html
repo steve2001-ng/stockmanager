@@ -1,0 +1,157 @@
+{% extends 'equipments/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <h1>{% if form.instance.pk %}Modifier{% else %}Ajouter{% endif %} un Équipement</h1>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6">
+                {{ form.family.label_tag }} {{ form.family }}
+                {{ form.sub_family.label_tag }} {{ form.sub_family }}
+                {{ form.code.label_tag }} {{ form.code }}
+                {{ form.designation.label_tag }} {{ form.designation }}
+                {{ form.capacity.label_tag }} {{ form.capacity }}
+                {{ form.site.label_tag }} {{ form.site }}
+                {{ form.number.label_tag }} {{ form.number }}
+            </div>
+            <div class="col-md-6">
+                {{ form.group_count.label_tag }} {{ form.group_count }}
+                {{ form.power_per_group.label_tag }} {{ form.power_per_group }}
+                {{ form.manufacturer.label_tag }} {{ form.manufacturer }}
+                {{ form.temperature_setpoint.label_tag }} {{ form.temperature_setpoint }}
+                {{ form.status.label_tag }} {{ form.status }}
+                {{ form.commissioning_date.label_tag }} {{ form.commissioning_date }}
+                {{ form.documentation.label_tag }} {{ form.documentation }}
+                {{ form.caracteristiques.label_tag }} {{ form.caracteristiques }}
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+        <a href="{% url 'equipments:equipment_list' %}" class="btn btn-secondary">Annuler</a>
+    </form>
+
+    <hr>
+
+    <h2 class="mt-5">Liste des équipements</h2>
+    <table class="table table-hover" id="equipment-table">
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Désignation</th>
+                <th>Site</th>
+                <th>Statut</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for eq in equipments %}
+            <tr class="equipment-row" data-code="{{ eq.code }}" style="cursor:pointer;">
+                <td>{{ eq.code }}</td>
+                <td>{{ eq.designation }}</td>
+                <td>{{ eq.get_site_display }}</td>
+                <td>{{ eq.get_status_display }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal Arborescence -->
+<div class="modal fade" id="arborescenceModal" tabindex="-1" aria-labelledby="arborescenceLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="arborescenceLabel">Arborescence</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+      </div>
+      <div class="modal-body">
+        <ul id="arborescence-container" class="tree-root"></ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_styles %}
+<style>
+.tree-root, .tree-root ul {
+    list-style: none;
+    padding-left: 20px;
+}
+.tree-root li {
+    margin-bottom: 10px;
+}
+.node {
+    margin-bottom: 5px;
+}
+.equipment-row:hover {
+    background-color: #f0f8ff;
+}
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const rows = document.querySelectorAll('.equipment-row');
+    rows.forEach(row => {
+        row.addEventListener('click', function() {
+            const code = this.getAttribute('data-code');
+            fetch(`/equipments/${code}/arborescence/`)
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('arborescenceLabel').textContent = `Arborescence - ${data.equipement.code} : ${data.equipement.designation}`;
+                    const container = document.getElementById('arborescence-container');
+                    container.innerHTML = '';
+
+                    function renderNode(node) {
+                        const li = document.createElement('li');
+                        const nodeHtml = `
+                            <div class="node d-flex align-items-center justify-content-between">
+                                <div>
+                                    <span class="fw-bold">${node.type}</span> –
+                                    <span class="text-primary">${node.code}</span> :
+                                    ${node.designation}
+                                </div>
+                            </div>
+                        `;
+                        li.innerHTML = nodeHtml;
+
+                        if (node.enfants && node.enfants.length > 0) {
+                            const ul = document.createElement('ul');
+                            node.enfants.forEach(child => {
+                                ul.appendChild(renderNode(child));
+                            });
+                            li.appendChild(ul);
+                        }
+                        return li;
+                    }
+
+                    data.arborescence.forEach(node => {
+                        container.appendChild(renderNode(node));
+                    });
+
+                    const modal = new bootstrap.Modal(document.getElementById('arborescenceModal'));
+                    modal.show();
+                })
+                .catch(() => alert("Erreur de chargement de l'arborescence."));
+        });
+    });
+});
+</script>
+{% endblock %}

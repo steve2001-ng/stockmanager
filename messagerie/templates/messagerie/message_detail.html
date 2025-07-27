@@ -1,0 +1,50 @@
+{% extends "messagerie/base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>{{ message.subject }}</h2>
+    {% if message.author == user %}
+    <div>
+        <a href="{% url 'messagerie:message_edit' message.pk %}"
+           class="btn btn-sm btn-outline-warning me-2">
+            <i class="bi bi-pencil-fill"></i> Modifier
+        </a>
+        <a href="{% url 'messagerie:message_delete' message.pk %}"
+           class="btn btn-sm btn-outline-danger"
+           onclick="return confirm('Voulez-vous vraiment supprimer ce message ?');">
+            <i class="bi bi-trash-fill"></i> Supprimer
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+<p>{{ message.body|linebreaks }}</p>
+<p>
+  <small>par {{ message.author }} le {{ message.created_at|date:"d/m/Y H:i" }}</small><br>
+  {% if message.mentions.all %}
+    Mentionné(s) :
+    {% for u in message.mentions.all %}
+      {{ u.username }}{% if not forloop.last %}, {% endif %}
+    {% endfor %}
+  {% endif %}
+</p>
+
+<hr>
+<h5>Commentaires</h5>
+{% for c in message.comments.all %}
+  <div class="border rounded p-2 mb-2">
+    <p>{{ c.body|linebreaks }}</p>
+    <small>par {{ c.author }} – {{ c.created_at|date:"d/m/Y H:i" }}</small>
+  </div>
+{% empty %}
+  <p>Aucun commentaire.</p>
+{% endfor %}
+
+<h5>Ajouter un commentaire</h5>
+<form method="post">
+  {% csrf_token %}
+  {{ form.body }}
+  <button class="btn btn-sm btn-success mt-1">
+    <i class="bi bi-send-fill me-1"></i>Envoyer
+  </button>
+</form>
+{% endblock %}

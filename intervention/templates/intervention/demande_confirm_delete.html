@@ -1,0 +1,27 @@
+{% extends 'intervention/base.html' %}
+
+{% block title %}Supprimer la demande #{{ object.id }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header bg-danger text-white">
+        <h2>Confirmer la suppression</h2>
+    </div>
+    <div class="card-body">
+        <p>Êtes-vous sûr de vouloir supprimer la demande #{{ object.id }} ?</p>
+        <p class="text-danger">Cette action est irréversible et supprimera également tous les ordres et rapports associés.</p>
+        
+        <form method="post">
+            {% csrf_token %}
+            <div class="d-flex justify-content-between mt-4">
+                <a href="{% url 'intervention:demande_detail' object.pk %}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Annuler
+                </a>
+                <button type="submit" class="btn btn-danger">
+                    <i class="bi bi-trash"></i> Confirmer la suppression
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

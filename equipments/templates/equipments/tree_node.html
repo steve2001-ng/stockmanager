@@ -1,0 +1,21 @@
+<li>
+    <strong>{{ node.type }}</strong> - {{ node.code }} : {{ node.designation }}
+    
+    {% if node.image_url %}
+        <br><img src="{{ node.image_url }}" alt="image" style="max-width:100px;">
+    {% endif %}
+    
+    <br>
+    <a href="{% url 'equipments:sous_ensemble_create' equipement_pk=equipement.code %}?parent={{ node.id }}"
+       class="btn btn-sm btn-outline-success mt-1">
+        ➕ Ajouter enfant
+    </a>
+
+    {% if node.enfants %}
+        <ul>
+            {% for enfant in node.enfants %}
+                {% include 'equipments/tree_node.html' with node=enfant %}
+            {% endfor %}
+        </ul>
+    {% endif %}
+</li>

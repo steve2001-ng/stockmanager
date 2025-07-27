@@ -1,0 +1,31 @@
+{% extends "messagerie/base.html" %}
+{% block content %}
+<div class="container my-5">
+  <div class="card message-card mx-auto" style="max-width:600px;">
+    <div class="message-header">
+      <i class="bi bi-pencil-fill me-2"></i>Nouveau message
+    </div>
+    <div class="message-body">
+      <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+          {{ form.subject.label_tag }}
+          {{ form.subject }}
+        </div>
+        <div class="mb-3">
+          {{ form.body.label_tag }}
+          {{ form.body }}
+        </div>
+        <div class="mb-3">
+          {{ form.mentions.label_tag }}
+          {{ form.mentions }}
+          <div class="form-text">Ctrl/Cmd + clic pour plusieurs</div>
+        </div>
+        <button type="submit" class="btn btn-primary">
+          <i class="bi bi-send-fill me-1"></i>Publier
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

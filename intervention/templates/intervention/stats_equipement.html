@@ -1,0 +1,164 @@
+{% extends 'intervention/base.html' %}
+
+{% block title %}Statistiques des équipements{% endblock %}
+
+{% block content %}
+
+    {# Affichage des messages #}
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+        </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Sélection de l'équipement -->
+    <div class="card mb-4">
+        <div class="card-header">
+        <h2>Sélectionnez un équipement</h2>
+        </div>
+        <div class="card-body">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-4">
+            <label for="equip_id" class="form-label">Équipement</label>
+            <select id="equip_id" name="equip_id" class="form-select" required>
+                <option value="" disabled selected>-- Choisir un équipement --</option>
+                {% for eq in equipements %}
+                <option value="{{ eq.id }}"
+                    {% if equipement and eq.id == equipement.id %}selected{% endif %}>
+                    {{ eq.designation }} ({{ eq.code }})
+                </option>
+                {% endfor %}
+            </select>
+            </div>
+        {% if equipement %}
+          <!-- vos champs start_date / end_date ici -->
+        {% endif %}
+        <div class="col-md-2">
+          <button type="submit" class="btn btn-primary">
+            {% if equipement %}Filtrer{% else %}Afficher{% endif %}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  {% if equipement %}
+    <!-- Indicateurs clés -->
+    <div class="row">
+      <div class="col-md-4">
+        <div class="card mb-4">
+          <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Indicateurs clés</h4>
+          </div>
+          <div class="card-body">
+            <div class="mb-3">
+              <h5>MTTR</h5>
+              <p class="display-6">{{ mttr|time:"H:i" }} heures</p>
+              <small class="text-muted">Mean Time To Repair</small>
+            </div>
+            <div class="mb-3">
+              <h5>MTBF</h5>
+              <p class="display-6">
+                {% if mtbf %}
+                  {{ mtbf_days }}j {{ mtbf_hours }}h
+                {% else %}
+                  N/A
+                {% endif %}
+              </p>
+              <small class="text-muted">Mean Time Between Failures</small>
+            </div>
+            <div>
+              <h5>Disponibilité</h5>
+              <p class="display-6">{{ disponibilite }}%</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Graphique de répartition -->
+      <div class="col-md-8">
+        <div class="card mb-4">
+          <div class="card-header bg-info text-white">
+            <h4 class="mb-0">Répartition des interventions</h4>
+          </div>
+          <div class="card-body">
+            <canvas id="interventionChart" height="250"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Historique des interventions -->
+    <div class="card">
+      <div class="card-header bg-success text-white">
+        <h4 class="mb-0">Historique des interventions</h4>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Ordre</th>
+                <th>Description</th>
+                <th>Statut</th>
+                <th>Temps</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for rapport in rapports %}
+                <tr>
+                  <td>{{ rapport.date_creation|date:"d/m/Y" }}</td>
+                  <td>#{{ rapport.ordre.id }}</td>
+                  <td>{{ rapport.description|truncatechars:50 }}</td>
+                  <td>
+                    <span class="badge bg-{% if rapport.statut == 'S' %}success
+                                            {% elif rapport.statut == 'E' %}danger
+                                            {% elif rapport.statut == 'R' %}warning
+                                            {% else %}info{% endif %}">
+                      {{ rapport.get_statut_display }}
+                    </span>
+                  </td>
+                  <td>{{ rapport.temps_passe }}h</td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="5" class="text-center">Aucune intervention enregistrée</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block scripts %}
+{% if equipement %}
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const ctx = document.getElementById('interventionChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Réussies','Échouées','Reportées','Autres'],
+          datasets: [{
+            label: "Nombre d'interventions",
+            data: [
+              {{ rapports_reussis }},
+              {{ rapports_echoues }},
+              {{ rapports_reportes }},
+              {{ rapports_autres }}            
+            ]
+          }]
+        },
+        options: { responsive: true, scales: { y: { beginAtZero: true } } }
+      });
+    });
+  </script>
+{% endif %}
+{% endblock %}

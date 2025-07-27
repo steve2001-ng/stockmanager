@@ -1,0 +1,174 @@
+{% extends "preventive/base.html" %}
+{% load static %}
+{% load preventive_tags %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="fas fa-thermometer-half me-2"></i>Relevés de Température</h2>
+        <a href="{% url 'preventive:temperature_reading_create' %}" class="btn btn-success">
+            <i class="fas fa-plus me-1"></i> Nouveau Relevé
+        </a>
+    </div>
+    <div class="container-fluid">
+    <!-- Filtres et statistiques -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body py-3">
+            <div class="d-flex flex-wrap justify-content-between align-items-center">
+                <!-- Filtres période -->
+                <div class="btn-group btn-group-sm mb-2 mb-md-0" role="group">
+                    <a href="?period=all" 
+                       class="btn btn-outline-secondary {% if active_period == 'all' %}active{% endif %}">
+                        Tous les relevés
+                    </a>
+                    <a href="?period=today" 
+                       class="btn btn-outline-primary {% if active_period == 'today' %}active{% endif %}">
+                        Aujourd'hui
+                    </a>
+                    <a href="?period=week" 
+                       class="btn btn-outline-primary {% if active_period == 'week' %}active{% endif %}">
+                        Cette semaine
+                    </a>
+                    <a href="?period=month" 
+                       class="btn btn-outline-primary {% if active_period == 'month' %}active{% endif %}">
+                        Ce mois
+                    </a>
+                </div>
+                
+                <!-- Compteurs -->
+                <div class="d-flex flex-wrap gap-3">
+                    <span class="badge bg-secondary">
+                        <i class="fas fa-database me-1"></i> Total: {{ count_all }}
+                    </span>
+                    <span class="badge bg-primary">
+                        <i class="fas fa-calendar-day me-1"></i> Aujourd'hui: {{ count_today }}
+                    </span>
+                    <span class="badge bg-info">
+                        <i class="fas fa-calendar-week me-1"></i> Semaine: {{ count_week }}
+                    </span>
+                    <span class="badge bg-warning text-dark">
+                        <i class="fas fa-calendar-alt me-1"></i> Mois: {{ count_month }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th><i class="fas fa-calendar-day"></i> Date</th>
+                            <th><i class="fas fa-clock"></i> Heure</th>
+                            <th><i class="fas fa-snowflake"></i> Équipement</th>
+                            <th><i class="fas fa-temperature-low"></i> Température</th>
+                            <th><i class="fas fa-user"></i> Enregistré par</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for reading in readings %}
+                        <tr>
+                            <td>{{ reading.reading_date|date:"d/m/Y" }}</td>
+                            <td>{{ reading.reading_time|time:"H:i" }}</td>
+                            <td>{{ reading.equipment.designation }}</td>
+                            <td class="{{ reading.temperature|default:0|floatformat:1|add:'0'|slice:'0:1' }}">
+                                {{ reading.temperature|floatformat:1 }}°C
+                            </td>
+                            <td>{{ reading.recorded_by }}</td>
+                            <td>
+                                <!-- Bouton Visualiser -->
+                                <a href="{% url 'preventive:temperature_reading_detail' reading.pk %}" 
+                                class="btn btn-sm btn-info" title="Visualiser">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                
+                                <!-- Bouton Éditer -->
+                                <a href="{% url 'preventive:temperature_reading_update' reading.pk %}" 
+                                class="btn btn-sm btn-primary" title="Éditer">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                
+                                <!-- Bouton Supprimer -->
+                                <button type="button" class="btn btn-sm btn-danger" 
+                                        data-bs-toggle="modal" data-bs-target="#deleteModal{{ reading.pk }}" title="Supprimer">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                                <!-- Modal de confirmation de suppression -->
+                                <div class="modal fade" id="deleteModal{{ reading.pk }}" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header bg-danger text-white">
+                                                <h5 class="modal-title">Confirmer la suppression</h5>
+                                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Êtes-vous sûr de vouloir supprimer le relevé du <strong>{{ reading.reading_date|date:"d/m/Y" }}</strong> ?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                                <form method="post" action="{% url 'preventive:temperature_reading_delete' reading.pk %}">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn-danger">
+                                                        <i class="fas fa-trash-alt me-1"></i> Supprimer
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center text-muted">Aucun relevé enregistré</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- Pagination -->
+            {% if is_paginated %}
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center mt-4">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1&period={{ active_period }}" aria-label="First">
+                            <span aria-hidden="true"><i class="fas fa-angle-double-left"></i></span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}&period={{ active_period }}" aria-label="Previous">
+                            <span aria-hidden="true"><i class="fas fa-angle-left"></i></span>
+                        </a>
+                    </li>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                        <li class="page-item active"><a class="page-link" href="#">{{ num }}</a></li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <li class="page-item"><a class="page-link" href="?page={{ num }}&period={{ active_period }}">{{ num }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}&period={{ active_period }}" aria-label="Next">
+                            <span aria-hidden="true"><i class="fas fa-angle-right"></i></span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}&period={{ active_period }}" aria-label="Last">
+                            <span aria-hidden="true"><i class="fas fa-angle-double-right"></i></span>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

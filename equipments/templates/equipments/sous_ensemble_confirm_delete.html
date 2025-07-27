@@ -1,0 +1,9 @@
+{% extends 'equipments/base.html' %}
+
+<h2>Confirmer la suppression</h2>
+<p>Êtes-vous sûr de vouloir supprimer le sous-ensemble {{ sous_ensemble.designation }} ?</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Oui, supprimer</button>
+    <a href="#" onclick="window.history.back(); return false;">Annuler</a>
+</form>

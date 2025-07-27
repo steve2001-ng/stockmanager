@@ -1,0 +1,66 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Commande #{{ commande.id }}</title>
+    <style>
+        body {
+            font-family: DejaVu Sans, Arial, sans-serif;
+            font-size: 12px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .label {
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            border: 1px solid #444;
+            padding: 6px;
+        }
+        th {
+            background-color: #eee;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Fiche Commande #{{ commande.id }}</h1>
+
+<div class="section">
+    <p><span class="label">Date :</span> {{ commande.date|date:"d/m/Y" }}</p>
+    <p><span class="label">Initiée par :</span> {{ commande.initie_par }}</p>
+    <p><span class="label">Objet :</span> {{ commande.objet }}</p>
+    <p><span class="label">Statut :</span> {{ commande.get_status_display }}</p>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Désignation</th>
+            <th>Quantité</th>
+            <th>Caractéristiques</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ commande.designation }}</td>
+            <td>{{ commande.quantite }}</td>
+            <td>{{ commande.caracteristiques|linebreaksbr }}</td>
+        </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

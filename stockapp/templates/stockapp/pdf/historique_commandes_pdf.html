@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Historique des Commandes - {{ categorie.nom }}</title>
+    <style>
+        body {
+            font-family: DejaVu Sans, Arial, sans-serif;
+            font-size: 12px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #444;
+            padding: 6px;
+            text-align: left;
+        }
+        th {
+            background-color: #eee;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Historique des Commandes</h1>
+
+<div class="section">
+    <p><strong>Catégorie :</strong> {{ categorie.nom }}</p>
+    <p><strong>Date d'impression :</strong> {{ now|date:"d/m/Y H:i" }}</p>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Désignation</th>
+            <th>Quantité</th>
+            <th>Objet</th>
+            <th>Statut</th>
+            <th>Initiée par</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for commande in commandes %}
+        <tr>
+            <td>{{ commande.date|date:"d/m/Y" }}</td>
+            <td>{{ commande.designation }}</td>
+            <td>{{ commande.quantite }}</td>
+            <td>{{ commande.objet }}</td>
+            <td>{{ commande.get_status_display }}</td>
+            <td>{{ commande.initie_par }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6">Aucune commande enregistrée.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</body>
+</html>

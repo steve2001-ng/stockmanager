@@ -1,0 +1,263 @@
+{% extends "stockapp/base.html" %}
+{% load static %}
+
+{% block title %}Tableau de bord{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Bilan</h1>
+    
+    <!-- Section Statistiques -->
+    <div class="dashboard-stats">
+        <!-- Carte Statistiques Globales -->
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-box-open"></i>
+            </div>
+            <div class="stat-content">
+                <h3>Stock Total</h3>
+                <p class="stat-value">{{ total_produits }}</p>
+                <p class="stat-label">produits enregistrés</p>
+            </div>
+        </div>
+        
+        <!-- Carte Alertes -->
+        <div class="stat-card alert">
+            <div class="stat-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <div class="stat-content">
+                <h3>Alertes</h3>
+                <p class="stat-value">{{ produits_alerte }}</p>
+                <p class="stat-label">produits sous le seuil</p>
+            </div>
+        </div>
+        
+        <!-- Statistiques par Catégorie -->
+        <div class="categories-stats">
+            <h3><i class="fas fa-tags"></i> Par Catégorie</h3>
+            <div class="categories-grid">
+                {% for categorie in categories %}
+                <div class="category-item">
+                    <h4>{{ categorie.nom }}</h4>
+                    <div class="category-stats">
+                        <span class="count">{{ categorie.nb_produits }} produits</span>
+                        {% if categorie.nb_alertes > 0 %}
+                        <span class="alerts">{{ categorie.nb_alertes }} alertes</span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Derniers Produits -->
+    <div class="recent-section">
+        <h2><i class="fas fa-cubes"></i>Produits récents</h2>
+        <table class="product-table">
+            <thead>
+                <tr>
+                    <th>Désignation</th>
+                    <th>Quantité</th>
+                    <th>Caractéristiques</th>
+                    <th>Catégorie</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for produit in derniers_produits %}
+                <tr>
+                    <td>{{ produit.designation }}</td>
+                    <td class="stock-{{ produit.statut_stock }}">
+                        {{ produit.quantite }}
+                        {% if produit.quantite <= produit.stock_alerte %}
+                        <i class="fas fa-exclamation-circle"></i>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if produit.caracteristiques %}
+                        {{ produit.caracteristiques|truncatechars:30 }}  <!-- Affichage tronqué -->
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>{{ produit.categorie.nom|default:"-" }}</td>
+                    <td>{{ produit.date_creation|date:"d/m/Y" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Dernières Commandes -->
+    <div class="recent-section">
+        <h2><i class="fas fa-clipboard-list"></i>Commandes récentes</h2>
+        <table class="order-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Référence</th>
+                    <th>Produit</th>
+                    <th>Quantité</th>
+                    <th>Statut</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for commande in dernieres_commandes %}
+                <tr>
+                    <td>{{ commande.date|date:"d/m/Y" }}</td>
+                    <td>CMD-{{ commande.id }}</td>
+                    <td>{{ commande.designation }}</td>
+                    <td>{{ commande.quantite }}</td>
+                    <td>
+                        <span class="status-{{ commande.status }}">
+                            {{ commande.get_status_display }}
+                        </span>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">Aucune commande récente</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+/* Styles globaux */
+.container {
+    max-width: 1200px;
+    padding: 20px;
+}
+
+/* Cartes statistiques */
+.dashboard-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    display: flex;
+    align-items: center;
+}
+
+.stat-card.alert {
+    border-left: 4px solid #e74c3c;
+}
+
+.stat-icon {
+    font-size: 2rem;
+    color: #3498db;
+    margin-right: 20px;
+}
+
+.stat-card.alert .stat-icon {
+    color: #e74c3c;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+/* Statistiques par catégorie */
+.categories-stats {
+    grid-column: span 2;
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.category-item {
+    padding: 15px;
+    border-left: 3px solid #3498db;
+    background: #f8f9fa;
+}
+
+.category-item h4 {
+    margin: 0 0 10px 0;
+    color: #2c3e50;
+}
+
+.category-stats {
+    font-size: 0.9rem;
+}
+
+.alerts {
+    color: #e74c3c;
+    margin-left: 10px;
+}
+
+/* Tableaux */
+.recent-section {
+    margin-bottom: 40px;
+}
+
+.product-table, .order-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.product-table th, .order-table th {
+    background: #2c3e50;
+    color: white;
+    padding: 12px 15px;
+    text-align: left;
+}
+
+.product-table td, .order-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+/* Styles des statuts */
+.stock-danger {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+.stock-warning {
+    color: #f39c12;
+}
+
+.stock-good {
+    color: #27ae60;
+}
+
+.status-attente {
+    color: #f39c12;
+}
+
+.status-validee {
+    color: #27ae60;
+}
+
+.status-rejetee {
+    color: #e74c3c;
+}
+
+/* Icônes */
+.fas {
+    margin-right: 8px;
+}
+</style>
+{% endblock %}

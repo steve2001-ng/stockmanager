@@ -1,0 +1,156 @@
+<div class="sidebar bg-white shadow">
+    <div class="sidebar-header p-4 border-bottom text-center">
+        <img src="/media/chillmaster.png"
+            alt="ChillMaster"
+            class="img-fluid mx-auto"
+            style="max-height:150px;">
+    </div>
+    <ul class="sidebar-menu list-unstyled ps-0">
+        <!-- Tableau de bord -->
+        <li class="sidebar-item">
+            <a href="{% url 'dashboard_app:dashboard' %}" class="sidebar-link text-dark">
+                <i class="bi bi-speedometer2 text-primary"></i>
+                <span>Tableau de bord</span>
+            </a>
+        </li>
+        
+        <!-- Personnel -->
+        <li class="sidebar-item">
+            <a href="{% url 'accounts:admin_access' %}" class="sidebar-link text-dark">
+                <i class="bi bi-people-fill text-primary"></i>
+                <span>Personnel</span>
+            </a>
+        </li>
+        
+        <!-- Equipements -->
+        <li class="sidebar-item">
+            <a href="{% url 'equipments:equipment_list' %}"  class="sidebar-link text-dark">
+                <i class="bi bi-pc-display text-primary"></i>
+                <span>Equipements</span>
+            </a>
+        </li>
+        
+        <!-- Interventions -->
+        <li class="sidebar-item">
+            <a href="{% url 'intervention:demande_list' %}" class="sidebar-link text-dark">
+                <i class="bi bi-tools text-primary"></i>
+                <span>Interventions</span>
+            </a>
+        </li>
+        
+        <!-- Stock -->
+        <li class="sidebar-item">
+            <a href="{% url 'stockapp:index' %}" class="sidebar-link text-dark">
+                <i class="bi bi-box-seam text-primary"></i>
+                <span>Stock</span>
+            </a>
+        </li>
+        
+        <!-- Préventif -->
+        <li class="sidebar-item">
+            <a href="{% url 'preventive:temperature_readings' %}" class="sidebar-link text-dark">
+                <i class="bi bi-shield-check text-primary"></i>
+                <span>Préventif</span>
+            </a>
+        </li>
+        
+        <!-- Consommation -->
+        <li class="sidebar-item">
+            <a href="{% url 'consommation:consommation_par_site' %}" class="sidebar-link text-dark">
+                <i class="bi bi-lightning-charge text-primary"></i>
+                <span>Consommation</span>
+            </a>
+        </li>
+
+        <!-- Pannes -->
+        <li class="sidebar-item">
+            <a href="{% url 'pannes:liste_pannes' %}" class="sidebar-link text-dark">
+                <i class="bi bi-exclamation-triangle text-danger"></i>
+                <span>Pannes</span>
+            </a>
+        </li>
+        
+        <!-- Outils d'analyse -->
+        <li class="sidebar-item">
+            <a href="#" class="sidebar-link text-dark">
+                <i class="bi bi-graph-up text-primary"></i>
+                <span>Outils d'analyse</span>
+            </a>
+        </li>
+        
+
+        <!-- Boutique -->
+        <li class="sidebar-item">
+            <a href="#" class="sidebar-link text-dark">
+                <i class="bi bi-shop text-primary"></i>
+                <span>Boutiques</span>
+            </a>
+        </li>
+
+        <!-- Entrepôts -->
+        <li class="sidebar-item">
+            <a href="{% url 'entrepots:liste_sites' %}" class="sidebar-link text-dark">
+                <i class="bi bi-boxes text-primary"></i>
+                <span>Entrepôts</span>
+            </a>
+        </li>
+    </ul>
+</div>
+
+<style>
+    .sidebar {
+        width: 250px;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        transition: all 0.3s;
+    }
+    
+    .sidebar-menu {
+        padding-left: 0;
+    }
+    
+    .sidebar-item {
+        padding: 12px 20px;
+        border-left: 4px solid transparent;
+        transition: all 0.3s;
+    }
+    
+    .sidebar-item:hover, .sidebar-item.active {
+        background-color: rgba(13, 110, 253, 0.1);
+        border-left: 4px solid #0d6efd;
+    }
+    
+    .sidebar-link {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        font-weight: 500;
+    }
+    
+    .sidebar-link i {
+        font-size: 1.1rem;
+        width: 24px;
+        margin-right: 12px;
+    }
+    
+    @media (max-width: 768px) {
+        .sidebar {
+            left: -250px;
+        }
+        .sidebar.active {
+            left: 0;
+        }
+    }
+</style>
+
+<script>
+    // Script pour le menu responsive (optionnel)
+    document.querySelectorAll('.sidebar-link').forEach(link => {
+        if(link.href === window.location.href) {
+            link.parentElement.classList.add('active');
+        }
+    });
+</script>

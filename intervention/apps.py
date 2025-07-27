@@ -1,0 +1,9 @@
+from django.apps import AppConfig
+
+
+class InterventionConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'intervention'
+
+    def ready(self):
+        import intervention.signals

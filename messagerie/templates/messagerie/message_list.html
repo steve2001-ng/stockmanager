@@ -1,0 +1,45 @@
+{% extends "messagerie/base.html" %}
+{% block content %}
+<div class="container my-5">
+  <h2><i class="bi bi-chat-dots-fill me-2 text-primary"></i>Forum de messages</h2>
+  <a href="{% url 'messagerie:message_create' %}" class="btn btn-success mb-4">
+    <i class="bi bi-plus-circle me-1"></i>Nouveau message
+  </a>
+  <ul class="list-group message-list">
+    {% for msg in messages %}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <div>
+          <i class="bi bi-envelope-fill text-primary me-2"></i>
+          <a href="{% url 'messagerie:message_detail' msg.pk %}" class="message-subject">
+            {{ msg.subject }}
+          </a>
+          <div class="message-meta">
+            par {{ msg.author }} le {{ msg.created_at|date:"d/m/Y H:i" }}
+          </div>
+        </div>
+        <div class="d-flex align-items-center">
+          {% if msg.author == user %}
+            <a href="{% url 'messagerie:message_edit' msg.pk %}" 
+              class="btn btn-sm btn-outline-warning me-1" 
+              title="Modifier">
+              <i class="bi bi-pencil-fill"></i>
+            </a>
+            <a href="{% url 'messagerie:message_delete' msg.pk %}" 
+              class="btn btn-sm btn-outline-danger" 
+              onclick="return confirm('Voulez-vous vraiment supprimer ce message ?');" 
+              title="Supprimer">
+              <i class="bi bi-trash-fill"></i>
+            </a>
+          {% endif %}
+          <i class="bi bi-chevron-right text-secondary ms-2"></i>
+        </div>
+
+      </li>
+    {% empty %}
+      <li class="list-group-item text-center text-muted">
+        Aucun message pour le moment.
+      </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

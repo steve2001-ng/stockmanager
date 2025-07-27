@@ -1,0 +1,109 @@
+/* === Entrepôts App Styles === */
+
+/* Conteneur principal */
+.entrepot-container {
+    margin-top: 2rem;
+}
+
+/* Section sélection */
+.site-selector {
+    margin-bottom: 2rem;
+    max-width: 400px;
+}
+
+/* Image du site sélectionné */
+.site-photo {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-bottom: 1.5rem;
+}
+
+/* Table des entrepôts */
+.entrepot-table {
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+.entrepot-table thead {
+    background-color: var(--primary-color, #0d6efd);
+    color: #fff;
+}
+
+.entrepot-table th,
+.entrepot-table td {
+    padding: 0.75rem 1rem;
+    vertical-align: middle;
+}
+
+.entrepot-table td img {
+    max-width: 100px;
+    height: auto;
+    border-radius: 4px;
+}
+
+/* Actions */
+.action-icons i {
+    font-size: 1.2rem;
+    margin-right: 0.5rem;
+    color: #0d6efd;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.action-icons i:hover {
+    transform: scale(1.2);
+}
+
+/* Bouton ajouter */
+.btn-ajouter {
+    margin-bottom: 2rem;
+    display: inline-block;
+}
+
+/* Formulaire d’ajout */
+.form-ajout-site {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    max-width: 600px;
+    margin: 2rem auto;
+}
+
+.form-ajout-site h2 {
+    margin-bottom: 1.5rem;
+}
+
+.pdf-buttons a {
+    margin-right: 5px;
+}
+
+.entrepot-table th,
+.entrepot-table td {
+    vertical-align: middle;
+}
+
+.badge {
+    font-size: 0.85rem;
+    padding: 0.4em 0.6em;
+}
+
+
+/* Responsive */
+@media (max-width: 768px) {
+    .entrepot-table td img {
+        max-width: 80px;
+    }
+
+    .action-icons i {
+        font-size: 1rem;
+    }
+
+    .form-ajout-site {
+        padding: 1.5rem;
+    }
+}

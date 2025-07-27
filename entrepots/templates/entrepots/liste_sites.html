@@ -1,0 +1,145 @@
+{% extends "entrepots/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="bi bi-buildings"></i> Entrepôts Frigorifiques</h2>
+        <a href="{% url 'entrepots:ajouter_site' %}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Ajouter un site
+        </a>
+    </div>
+
+    <form method="get" class="mb-4">
+        <div class="row g-2 align-items-end">
+            <div class="col-md-6">
+                <label for="site" class="form-label">Sélectionner un site</label>
+                <select name="site" id="site" class="form-select" onchange="this.form.submit()">
+                    <option value="">-- Choisir un site --</option>
+                    {% for s in sites %}
+                        <option value="{{ s.id }}" {% if site_selectionne and s.id == site_selectionne.id %}selected{% endif %}>{{ s.designation }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </form>
+
+    {% if site_selectionne %}
+        <div class="mb-4">
+            <img src="{{ site_selectionne.photo.url }}" alt="Photo du site" class="img-fluid rounded shadow">
+        </div>
+        <h4 class="mt-5"><i class="bi bi-clipboard-check me-1"></i> Informations du site</h4>
+        <table class="table table-bordered table-hover bg-white">
+            <thead class="table-primary">
+                <tr>
+                    <th>ID</th>
+                    <th>Désignation</th>
+                    <th>Ville</th>
+                    <th>Localisation</th>
+                    <th>Responsable</th>
+                    <th>Capacité Totale (T)</th>
+                    <th>Photo</th>
+                    <th>Documentation</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ site_selectionne.id }}</td>
+                    <td>{{ site_selectionne.designation }}</td>
+                    <td>{{ site_selectionne.ville }}</td>
+                    <td>{{ site_selectionne.localisation }}</td>
+                    <td>{{ site_selectionne.responsable }}</td>
+                    <td>{{ site_selectionne.capacite_totale }}</td>
+                    <td>
+                        <img src="{{ site_selectionne.photo.url }}" class="img-thumbnail" style="max-height: 60px;">
+                    </td>
+                    <td>
+                        {% if site_selectionne.documentation %}
+                            <a href="{{ site_selectionne.documentation.url }}" class="btn btn-sm btn-outline-primary" target="_blank">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <a href="{{ site_selectionne.documentation.url }}" class="btn btn-sm btn-outline-secondary" download>
+                                <i class="bi bi-download"></i>
+                            </a>
+                        {% else %}
+                            <span class="text-muted">Aucun fichier</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'entrepots:voir_site' site_selectionne.id %}" class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                        <a href="{% url 'entrepots:modifier_site' site_selectionne.id %}" class="btn btn-sm btn-outline-warning">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                        <a href="{% url 'entrepots:supprimer_site' site_selectionne.id %}" class="btn btn-sm btn-outline-danger">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                        <a href="{% url 'consommation:consommation_par_site' %}?site={{ site.id }}" class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-lightning"></i> 
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    {% endif %}
+    {% if equipements %}
+    <h4 class="mt-5"><i class="bi bi-tools"></i> Équipements du site</h4>
+    <table class="table table-bordered table-hover entrepot-table mt-3 bg-white">
+        <thead class="table-secondary">
+            <tr>
+                <th>Code</th>
+                <th>Désignation</th>
+                <th>Famille</th>
+                <th>Capacité (T)</th>
+                <th>Groupes</th>
+                <th>Constructeur</th>
+                <th>Statut</th>
+                <th>Documentation</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for eq in equipements %}
+            <tr>
+                <td>{{ eq.code }}</td>
+                <td>{{ eq.designation }}</td>
+                <td>{{ eq.get_family_display }}</td>
+                <td>{{ eq.capacity }}</td>
+                <td>{{ eq.group_count }}</td>
+                <td>{{ eq.manufacturer }}</td>
+                <td>
+                    {% if eq.status == "actif" %}
+                        <span class="badge bg-success">Actif</span>
+                    {% elif eq.status == "panne" %}
+                        <span class="badge bg-danger">Panne</span>
+                    {% elif eq.status == "arret" %}
+                        <span class="badge bg-warning text-dark">Arrêt</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Inconnu</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if eq.documentation %}
+                        <a href="{{ eq.documentation.url }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                        <a href="{{ eq.documentation.url }}" download class="btn btn-sm btn-outline-secondary">
+                            <i class="bi bi-download"></i>
+                        </a>
+                    {% else %}
+                        <span class="text-muted">Aucun</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% elif site_selectionne %}
+    <div class="alert alert-info mt-4">
+        Aucun équipement enregistré pour ce site.
+    </div>
+{% endif %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,136 @@
+{% extends 'intervention/base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}Créer un ordre de travail{% endblock %}
+
+{% block content %}
+<div class="card shadow rounded-4">
+    <div class="card-header bg-primary text-white d-flex align-items-center">
+        <i class="bi bi-clipboard-plus me-2 fs-4"></i>
+        <h2 class="mb-0 fs-4">Nouvel ordre de travail</h2>
+    </div>
+    <div class="card-body">
+        <form method="post" novalidate>
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <label for="{{ form.demande.id_for_label }}" class="form-label fw-semibold">
+                        <i class="bi bi-question-circle me-1"></i> Demande liée
+                        <a href="{% url 'intervention:demande_create' %}" class="btn btn-primary ms-3">
+                            <i class="bi bi-plus-circle"></i> Nouvelle demande
+                        </a>
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-question-circle"></i></span>
+                        {{ form.demande|add_class:"form-select" }}
+                    </div>
+                    <div class="text-danger small">{{ form.demande.errors }}</div>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="{{ form.equipement.id_for_label }}" class="form-label fw-semibold">
+                        <i class="bi bi-cpu me-1"></i> Équipement
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-hdd-network"></i></span>
+                        {{ form.equipement|add_class:"form-select" }}
+                    </div>
+                    <div class="text-danger small">{{ form.equipement.errors }}</div>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <label for="{{ form.sous_ensemble.id_for_label }}" class="form-label fw-semibold">
+                        <i class="bi bi-diagram-3 me-1"></i> Sous-ensemble
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-diagram-2-fill"></i></span>
+                        {{ form.sous_ensemble|add_class:"form-select" }}
+                    </div>
+                    <div class="text-danger small">{{ form.sous_ensemble.errors }}</div>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="{{ form.equipe.id_for_label }}" class="form-label fw-semibold">
+                        <i class="bi bi-people-fill me-1"></i> Équipe
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-person-gear"></i></span>
+                        {{ form.equipe|add_class:"form-select" }}
+                    </div>
+                    <div class="text-danger small">{{ form.equipe.errors }}</div>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <label for="{{ form.date_planifiee.id_for_label }}" class="form-label fw-semibold">
+                        <i class="bi bi-calendar-event me-1"></i> Date planifiée
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-calendar-check"></i></span>
+                        {{ form.date_planifiee|add_class:"form-control" }}
+                    </div>
+                    <div class="text-danger small">{{ form.date_planifiee.errors }}</div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label for="{{ form.description.id_for_label }}" class="form-label fw-semibold">
+                    <i class="bi bi-pencil-square me-1"></i> Description des travaux
+                </label>
+                {{ form.description|add_class:"form-control" }}
+                <div class="text-danger small">{{ form.description.errors }}</div>
+            </div>
+            <div class="mb-4">
+                <label for="{{ form.statut.id_for_label }}" class="form-label fw-semibold">
+                    <i class="bi bi-clipboard-check me-1"></i> Statut
+                </label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-award"></i></span>
+                    {{ form.statut|add_class:"form-select" }}
+                </div>
+                <div class="text-danger small">{{ form.statut.errors }}</div>
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+                <a href="{% url 'intervention:ordre_list' %}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left-circle me-1"></i> Annuler
+                </a>
+                <button type="submit" class="btn btn-success">
+                    <i class="bi bi-save2-fill me-1"></i> Enregistrer
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const equipementSelect = document.getElementById('id_equipement');
+    const sousEnsembleSelect = document.getElementById('id_sous_ensemble');
+
+    equipementSelect.addEventListener('change', function () {
+        const equipementId = this.value;
+        sousEnsembleSelect.innerHTML = '<option value="">Chargement...</option>';
+
+        if (equipementId) {
+            fetch(`/api/get-equipement-sous-ensembles/${equipementId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    let options = '<option value="">---------</option>';
+                    data.forEach(item => {
+                        options += `<option value="${item.id}">${item.designation}</option>`;
+                    });
+                    sousEnsembleSelect.innerHTML = options;
+                });
+        } else {
+            sousEnsembleSelect.innerHTML = '<option value="">---------</option>';
+        }
+    });
+});
+</script>
+{% endblock %}

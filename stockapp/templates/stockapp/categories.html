@@ -1,0 +1,23 @@
+{% extends "stockapp/base.html" %}
+{% load static %}
+
+{% block title %}Catégories de Produits{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Nos Catégories de Produits</h2>
+    
+    <div class="categories-grid">
+        {% for categorie in categories %}
+        <div class="category-card">
+            <div class="category-icon">
+                <i class="fas {{ categorie.icone }}"></i>
+            </div>
+            <h3>{{ categorie.nom }}</h3>
+            <p>{{ categorie.description }}</p>
+            <a href="{% url 'stockapp:produits_categorie' categorie.id %}" class="btn">Voir les produits</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

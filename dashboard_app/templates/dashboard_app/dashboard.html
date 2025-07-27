@@ -1,0 +1,351 @@
+{% extends 'dashboard_app/base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+<div class="container-fluid px-4">
+    <!-- En-tête -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mt-4">Tableau de bord</h1>
+        <div class="d-flex">
+            <button class="btn btn-primary me-2">
+                <i class="bi bi-plus-circle"></i> Nouvelle action
+            </button>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    <i class="bi bi-filter"></i> Filtres
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="#">Aujourd'hui</a></li>
+                    <li><a class="dropdown-item" href="#">Cette semaine</a></li>
+                    <li><a class="dropdown-item" href="#">Ce mois</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cartes de statistiques -->
+    <div class="row">
+        <!-- Carte 1 -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-start-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col me-2">
+                            <div class="text-xs fw-bold text-primary text-uppercase mb-1">
+                                Équipements</div>
+                            <div class="h5 mb-0 fw-bold text-gray-800">42</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="bi bi-pc-display fs-1 text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carte 2 -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-start-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col me-2">
+                            <div class="text-xs fw-bold text-success text-uppercase mb-1">
+                                Interventions</div>
+                            <div class="h5 mb-0 fw-bold text-gray-800">12</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="bi bi-tools fs-1 text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carte 3 -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-start-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col me-2">
+                            <div class="text-xs fw-bold text-warning text-uppercase mb-1">
+                                Pannes</div>
+                            <div class="h5 mb-0 fw-bold text-gray-800">{{ total_pannes }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="bi bi-exclamation-triangle fs-1 text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carte 4 -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-start-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col me-2">
+                            <div class="text-xs fw-bold text-warning text-uppercase mb-1">
+                                Alertes Stock</div>
+                            <div class="h5 mb-0 fw-bold text-gray-800">{{ nb_alertes }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="bi bi-exclamation-triangle fs-1 text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carte 6 - Consommation Électrique -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-start-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col me-2">
+                            <div class="text-xs fw-bold text-info text-uppercase mb-1">
+                                Conso. Électrique</div>
+                            <div class="h6 mb-0 fw-bold text-gray-800">
+                                {{ dernier_montant|intcomma }} FCFA
+                            </div>
+                            <small class="d-block text-muted">
+                                {{ dernier_mois }}
+                            </small>
+                            <small>
+                                {% if difference_montant > 0 %}
+                                    <span class="text-success fw-bold">
+                                        +{{ difference_montant|intcomma }} FCFA ↑
+                                    </span>
+                                {% elif difference_montant < 0 %}
+                                    <span class="text-danger fw-bold">
+                                        {{ difference_montant|intcomma }} FCFA ↓
+                                    </span>
+                                {% else %}
+                                    <span class="text-muted">Stable</span>
+                                {% endif %}
+                            </small>
+                            <div class="mt-1 small text-muted">
+                                <i class="bi bi-bar-chart-line"></i> 12 mois : {{ total_12mois|intcomma }} FCFA
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="bi bi-lightning-charge fs-1 text-info"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carte 7 - Répartition de la capacité -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card shadow h-80 py-2">
+                <div class="card-body">
+                    <h6 class="m-0 fw-bold text-secondary text-uppercase mb-2">
+                        Répartition Capacité de stockage
+                    </h6>
+                    <div style="height:200px;">
+                        <canvas id="repartitionChart"></canvas>
+                    </div>
+                    <div class="mt-3 small text-muted">
+                        Capacité totale : 95 500 tonnes
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Carte 5 - Performance Maintenance Préventive -->
+        <div class="col-xl-4 mb-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 fw-bold text-primary">Performance Maintenance Préventive</h6>
+                </div>
+                <div class="card-body">
+                    <p><strong>Opérations à venir :</strong> {{ upcoming_tasks }}</p>
+                    <p><strong>Effectuées :</strong> {{ completion_rate }}%</p>
+                    <p><strong>Manquées :</strong> {{ missed_tasks }} ({{ missed_rate }}%)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+
+    <!-- Graphiques et tableaux -->
+    <div class="row">
+        <!-- Graphique combiné -->
+        <div class="col-xl-8 mb-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 fw-bold text-primary">Courbes d'évolution</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-area">
+                        <canvas id="globalChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Liste des tâches préventives dues -->
+        <div class="col-xl-4 mb-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 fw-bold text-danger">Tâches préventives à faire</h6>
+                </div>
+                <div class="card-body">
+                    <div class="list-group list-group-flush">
+                        {% if due_tasks %}
+                            {% for task in due_tasks %}
+                                <a href="{% url 'preventive:calendar' %}" class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">{{ task.description|truncatechars:40 }}</h6>
+                                        <small>
+                                            {% if task.status == "missed" %}
+                                                <span class="badge bg-danger">Manquée</span>
+                                            {% elif task.status == "completed" %}
+                                                <span class="badge bg-success">Effectuée</span>
+                                            {% elif task.status == "postponed" %}
+                                                <span class="badge bg-warning text-dark">Reportée</span>
+                                            {% elif task.status == "incomplete" %}
+                                                <span class="badge bg-secondary">Inachevée</span>
+                                            {% else %}
+                                                <span class="badge bg-info text-dark">En attente</span>
+                                            {% endif %}
+                                        </small>
+                                    </div>
+                                    <small class="text-muted">
+                                        {{ task.next_due|date:"d/m/Y" }} – {{ task.equipment.designation }}
+                                    </small>
+                                </a>
+                            {% endfor %}
+                        {% else %}
+                            <div class="text-muted text-center py-3">
+                                Aucune tâche préventive urgente.
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border-radius: 0.5rem;
+        transition: transform 0.2s;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    
+    .chart-area {
+        position: relative;
+        height: 250px;
+    }
+    
+    .list-group-item {
+        border-left: 0;
+        border-right: 0;
+    }
+    
+    .list-group-item:first-child {
+        border-top: 0;
+    }
+
+    .badge {
+        font-size: 0.85rem;
+        padding: 0.4em 0.6em;
+        border-radius: 0.5rem;
+    }
+</style>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Graphique combiné
+    const ctxGlobal = document.getElementById('globalChart');
+    new Chart(ctxGlobal, {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            datasets: [
+                {
+                    label: 'Interventions',
+                    data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: 'rgba(78, 115, 223, 0.05)',
+                    borderColor: 'rgba(78, 115, 223, 1)',
+                    borderWidth: 2,
+                    pointRadius: 3,
+                    tension: 0.3
+                },
+                {
+                    label: 'Pannes',
+                    data: [5, 9, 4, 6, 3, 7],
+                    backgroundColor: 'rgba(255, 193, 7, 0.1)',
+                    borderColor: 'rgba(255, 193, 7, 1)',
+                    borderWidth: 2,
+                    pointRadius: 3,
+                    tension: 0.3
+                },
+                {
+                    label: 'Alertes Stock',
+                    data: [2, 4, 6, 5, 3, 2],
+                    backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                    borderColor: 'rgba(220, 53, 69, 1)',
+                    borderWidth: 2,
+                    pointRadius: 3,
+                    tension: 0.3
+                }
+            ]
+        },
+        options: {
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Diagramme en secteurs de répartition
+    const total = 95500;
+    const digue = 11000;
+    const sotranav = 17500;
+    const cittma = 11000;
+    const essengue = total - (digue + sotranav + cittma);
+    const ctxRep = document.getElementById('repartitionChart').getContext('2d');
+    new Chart(ctxRep, {
+        type: 'pie',
+        data: {
+            labels: ['Digue', 'Sotranav', 'CITTMA', 'Essengue'],
+            datasets: [{
+                data: [digue, sotranav, cittma, essengue],
+                backgroundColor: [
+                    'rgba(78, 115, 223, 0.8)',
+                    'rgba(28, 200, 138, 0.8)',
+                    'rgba(54, 185, 204, 0.8)',
+                    'rgba(246, 194, 62, 0.8)'
+                ]
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'right'
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

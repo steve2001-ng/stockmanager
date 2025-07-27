@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion de Stock - {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'stockapp/css/style.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-brand">
+                <a href="{% url 'stockapp:index' %}" class="logo">
+                    <img src="/media/chillmaster.png" alt="Logo Entreprise">
+                </a>
+                <span class="app-title">Gestion des stocks</span>
+            </div>
+            <div class="nav-links">
+                <!-- Profil -->
+                <a href="{% url 'accounts:profile' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-user me-2"></i>{{ user.username }}
+                </a>
+                <a href="{% url 'dashboard_app:dashboard' %}">Accueil</a>
+                <a href="{% url 'stockapp:index' %}">Bilan</a>
+                <a href="{% url 'stockapp:categories' %}">Catégories</a>
+                <a href="/admin/">Admin</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    
+    
+   
+</body>
+</html>

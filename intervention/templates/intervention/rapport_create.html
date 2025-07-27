@@ -1,0 +1,102 @@
+{% extends 'intervention/base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}Créer un rapport d'intervention{% endblock %}
+
+{% block content %}
+<div class="card shadow rounded-4">
+    <div class="card-header bg-primary text-white d-flex align-items-center">
+        <i class="bi bi-journal-text me-2 fs-4"></i>
+        <h2 class="mb-0 fs-4">Nouveau rapport d'intervention</h2>
+    </div>
+    <div class="card-body">
+        <form method="post" novalidate>
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <label for="{{ form.ordre.id_for_label }}" class="form-label fw-semibold">
+                        <i class="bi bi-card-checklist me-1"></i> Ordre de travail
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-clipboard-data"></i></span>
+                        {{ form.ordre|add_class:"form-control" }}
+                    </div>
+                    <div class="text-danger small">{{ form.ordre.errors }}</div>
+                </div>
+                <div class="col-md-3">
+                    <label for="{{ form.temps_passe.id_for_label }}" class="form-label fw-semibold">
+                        <i class="bi bi-clock-history me-1"></i> Temps passé (h)
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-hourglass-split"></i></span>
+                        {{ form.temps_passe|add_class:"form-control" }}
+                    </div>
+                    <div class="text-danger small">{{ form.temps_passe.errors }}</div>
+                </div>
+                <div class="col-md-3">
+                    <label for="{{ form.statut.id_for_label }}" class="form-label fw-semibold">
+                        <i class="bi bi-clipboard-check me-1"></i> Résultat
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-award"></i></span>
+                        {{ form.statut|add_class:"form-select" }}
+                    </div>
+                    <div class="text-danger small">{{ form.statut.errors }}</div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label for="{{ form.description.id_for_label }}" class="form-label fw-semibold">
+                    <i class="bi bi-pencil-square me-1"></i> Description
+                </label>
+                {{ form.description|add_class:"form-control" }}
+                <div class="text-danger small">{{ form.description.errors }}</div>
+            </div>
+
+            <div class="mb-4">
+                <label for="{{ form.actions.id_for_label }}" class="form-label fw-semibold">
+                    <i class="bi bi-hammer me-1"></i> Actions réalisées
+                </label>
+                {{ form.actions|add_class:"form-control" }}
+                <div class="text-danger small">{{ form.actions.errors }}</div>
+            </div>
+
+            <div class="mb-4">
+                <label for="{{ form.pieces_utilisees.id_for_label }}" class="form-label fw-semibold">
+                    <i class="bi bi-box-seam me-1"></i> Pièces utilisées
+                </label>
+                {{ form.pieces_utilisees|add_class:"form-control" }}
+                <div class="text-danger small">{{ form.pieces_utilisees.errors }}</div>
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+                <a href="{% url 'intervention:ordre_list' %}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left-circle me-1"></i> Annuler
+                </a>
+                <button type="submit" class="btn btn-success">
+                    <i class="bi bi-save2-fill me-1"></i> Enregistrer
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const ordreSelect = document.getElementById('id_ordre');
+
+    ordreSelect.addEventListener('change', function () {
+        const ordreId = this.value;
+        if (ordreId) {
+            fetch(`/api/get-ordre-info/${ordreId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                });
+        }
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,426 @@
+[
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "admin",
+    "model": "logentry"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "auth",
+    "model": "permission"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "auth",
+    "model": "group"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "contenttypes",
+    "model": "contenttype"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "sessions",
+    "model": "session"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "stockapp",
+    "model": "categorie"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "stockapp",
+    "model": "commande"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "stockapp",
+    "model": "produit"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "accounts",
+    "model": "customuser"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "dashboard_app",
+    "model": "usernotification"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "dashboard_app",
+    "model": "dashboardpreference"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "equipments",
+    "model": "equipment"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "equipments",
+    "model": "sousensemble"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "interventions",
+    "model": "intervention"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "interventions",
+    "model": "typeintervention"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "interventions",
+    "model": "equipement"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "interventions",
+    "model": "client"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "interventions",
+    "model": "demandeintervention"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "interventions",
+    "model": "affectationtechnicien"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "interventions",
+    "model": "gammemaintenance"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "interventions",
+    "model": "proceduresecurite"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "interventions",
+    "model": "ressource"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "pannes",
+    "model": "panne"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "preventive",
+    "model": "preventivetask"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "preventive",
+    "model": "temperaturereading"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "stockapp",
+    "model": "mouvementstock"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "intervention",
+    "model": "demandeintervention"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "intervention",
+    "model": "ordretravail"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "intervention",
+    "model": "rapportintervention"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "0ga7wvqlvrplxrweppg05my3q79apjky",
+  "fields": {
+    "session_data": ".eJxVjEsOAiEQBe_C2hCglY9L956BdNMgowaSYWZlvLtOMgvdvqp6LxFxXWpcR57jxOIstDj8boTpkdsG-I7t1mXqbZknkpsidzrktXN-Xnb376DiqN86-ZMNqmgN3mhjHXif0SEllRkZChVPwHDUJSjiYIsDsqaQY5NCIiPeH99AOGU:1uTkpV:sC3-_FFjELGB6QwxL8kqSrfloxFsSWiRF5PsIghSMZc",
+    "expire_date": "2025-07-07T17:19:37.828Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "2dnl0zza484koe3if1bp2gtsyj4gtbu2",
+  "fields": {
+    "session_data": ".eJxVjEsOAiEQBe_C2hCglY9L956BdNMgowaSYWZlvLtOMgvdvqp6LxFxXWpcR57jxOIstDj8boTpkdsG-I7t1mXqbZknkpsidzrktXN-Xnb376DiqN86-ZMNqmgN3mhjHXif0SEllRkZChVPwHDUJSjiYIsDsqaQY5NCIiPeH99AOGU:1uB6iO:ZQI-RojKYqaXxrQEQJmI0pthhcA7QX8NXMSgS9PYwhU",
+    "expire_date": "2025-05-17T06:51:12.688Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "75k9f0px67g0m0nmo2oq6iae5m1vif7w",
+  "fields": {
+    "session_data": ".eJxVjEsOAiEQBe_C2hCglY9L956BdNMgowaSYWZlvLtOMgvdvqp6LxFxXWpcR57jxOIstDj8boTpkdsG-I7t1mXqbZknkpsidzrktXN-Xnb376DiqN86-ZMNqmgN3mhjHXif0SEllRkZChVPwHDUJSjiYIsDsqaQY5NCIiPeH99AOGU:1uJznJ:qMcW2iBDHrp4L0RF83nLK3RR2xwSYTs8eIrpIG5o1z0",
+    "expire_date": "2025-06-10T19:17:01.135Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "syegtjrpxdnibksp89fjw89gtrlldazo",
+  "fields": {
+    "session_data": ".eJxVjEsOAiEQBe_C2hCglY9L956BdNMgowaSYWZlvLtOMgvdvqp6LxFxXWpcR57jxOIstDj8boTpkdsG-I7t1mXqbZknkpsidzrktXN-Xnb376DiqN86-ZMNqmgN3mhjHXif0SEllRkZChVPwHDUJSjiYIsDsqaQY5NCIiPeH99AOGU:1u9JY7:gKXnz7V4ExuHMq2m3orwoQ5ux1szTxJGkpJfwREGq9g",
+    "expire_date": "2025-05-12T08:09:11.246Z"
+  }
+},
+{
+  "model": "stockapp.categorie",
+  "pk": 1,
+  "fields": {
+    "nom": "Composants Úlectriques",
+    "description": "",
+    "icone": "fa-bolt"
+  }
+},
+{
+  "model": "stockapp.categorie",
+  "pk": 2,
+  "fields": {
+    "nom": "Composants frigorifiques",
+    "description": "",
+    "icone": "fa-snowflake"
+  }
+},
+{
+  "model": "stockapp.categorie",
+  "pk": 3,
+  "fields": {
+    "nom": "Fluide frigorigÞne",
+    "description": "",
+    "icone": "fa-gas-pump"
+  }
+},
+{
+  "model": "stockapp.categorie",
+  "pk": 4,
+  "fields": {
+    "nom": "Outillages",
+    "description": "",
+    "icone": "fa-tools"
+  }
+},
+{
+  "model": "stockapp.commande",
+  "pk": 1,
+  "fields": {
+    "categorie": 1,
+    "designation": "Multi 9",
+    "caracteristiques": "1",
+    "quantite": 4,
+    "objet": "OpÚration de remplacement standard",
+    "date": "2025-04-22",
+    "initie_par": "Hadlers",
+    "status": "validee",
+    "created_at": "2025-04-22T09:38:21.497Z"
+  }
+},
+{
+  "model": "stockapp.commande",
+  "pk": 2,
+  "fields": {
+    "categorie": 1,
+    "designation": "Contacteur tÚtrapolaire",
+    "caracteristiques": "400 VAC",
+    "quantite": 1,
+    "objet": "Remplacement standard",
+    "date": "2025-06-13",
+    "initie_par": "DESCARTES",
+    "status": "attente",
+    "created_at": "2025-06-13T08:50:13.996Z"
+  }
+},
+{
+  "model": "stockapp.commande",
+  "pk": 3,
+  "fields": {
+    "categorie": 1,
+    "designation": "Disjoncteur diffÚrentiel",
+    "caracteristiques": "300 mA",
+    "quantite": 3,
+    "objet": "Remplacement standard",
+    "date": "2025-06-13",
+    "initie_par": "DESCARTES",
+    "status": "rejetee",
+    "created_at": "2025-06-13T09:19:02.116Z"
+  }
+},
+{
+  "model": "stockapp.commande",
+  "pk": 4,
+  "fields": {
+    "categorie": 1,
+    "designation": "Contacteur modulaire",
+    "caracteristiques": "400VAC",
+    "quantite": 5,
+    "objet": "Remplacement standard",
+    "date": "2025-06-15",
+    "initie_par": "STEVE",
+    "status": "validee",
+    "created_at": "2025-06-15T13:07:13.837Z"
+  }
+},
+{
+  "model": "stockapp.produit",
+  "pk": 1,
+  "fields": {
+    "code": "CE_DD_001",
+    "famille": "Disjoncteurs diffÚrentiels",
+    "designation": "Disjoncteur diffÚrentiel modulaire",
+    "fournisseur": "Fokou",
+    "caracteristiques": "Phase - neutre32A, 30mA, 240 VAC",
+    "quantite": 1,
+    "stock_alerte": 2,
+    "categorie": 1,
+    "date_creation": "2025-05-27T19:54:06.884Z",
+    "date_maj": "2025-05-27T20:16:40.958Z",
+    "image": "produits/disjoncteur-differentiel-nbh8le-1pn-01.jpg"
+  }
+},
+{
+  "model": "stockapp.produit",
+  "pk": 2,
+  "fields": {
+    "code": "CE_CO_001",
+    "famille": "Contacteurs",
+    "designation": "Contacteur tÚtrapolaire",
+    "fournisseur": "Fokou",
+    "caracteristiques": "Marque : Schneider Electric  contacteur û 4P û AC-1 440V û 20A û bobine 230Vca.",
+    "quantite": 6,
+    "stock_alerte": 2,
+    "categorie": 1,
+    "date_creation": "2025-05-27T20:11:57.616Z",
+    "date_maj": "2025-06-13T12:13:47.728Z",
+    "image": "produits/Capture_dÚcran_2025-05-27_210925.png"
+  }
+},
+{
+  "model": "stockapp.produit",
+  "pk": 3,
+  "fields": {
+    "code": "CE_SE_001",
+    "famille": "Sectionneurs",
+    "designation": "Interrupteur sectionneur Interpact INS40 4P 400 A",
+    "fournisseur": "Fokou",
+    "caracteristiques": "4 p¶les 400 A",
+    "quantite": 9,
+    "stock_alerte": 2,
+    "categorie": 1,
+    "date_creation": "2025-05-27T20:19:33.479Z",
+    "date_maj": "2025-06-15T13:11:26.070Z",
+    "image": "produits/Capture_dÚcran_2025-05-27_211816.png"
+  }
+},
+{
+  "model": "stockapp.produit",
+  "pk": 4,
+  "fields": {
+    "code": "CE_RT_001",
+    "famille": "Relais Thermique",
+    "designation": "Tesys LRD - relais de protection thermique - 12..18A - classe 10A",
+    "fournisseur": "Fokou",
+    "caracteristiques": "12..18A - classe 10A",
+    "quantite": 23,
+    "stock_alerte": 2,
+    "categorie": 1,
+    "date_creation": "2025-05-27T20:25:42.458Z",
+    "date_maj": "2025-06-16T11:53:55.421Z",
+    "image": "produits/Capture_dÚcran_2025-05-27_212429.png"
+  }
+},
+{
+  "model": "stockapp.produit",
+  "pk": 5,
+  "fields": {
+    "code": "FF_R134A",
+    "famille": "Fluide FrigorigÞne",
+    "designation": "R134a",
+    "fournisseur": "FRAMACOLD",
+    "caracteristiques": "Point dÆÚbullition Ó 1 atm) ░C -26.1\r\nPoint de congÚlation ░C -103\r\nTempÚrature critique ░C 101.1\r\nPression critique Bar abs 40.67",
+    "quantite": 10,
+    "stock_alerte": 3,
+    "categorie": 3,
+    "date_creation": "2025-06-13T10:18:53.975Z",
+    "date_maj": "2025-06-13T10:18:53.975Z",
+    "image": "produits/images_g8bf27R.jpg"
+  }
+},
+{
+  "model": "stockapp.produit",
+  "pk": 6,
+  "fields": {
+    "code": "FF_R22",
+    "famille": "Fluide FrigorigÞne",
+    "designation": "R22",
+    "fournisseur": "KALTON",
+    "caracteristiques": 

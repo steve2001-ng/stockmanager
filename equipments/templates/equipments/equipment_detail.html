@@ -1,0 +1,178 @@
+{% extends 'equipments/base.html' %}
+{% load static %}
+
+{% block title %}Détail équipement - {{ equipment.designation }}{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <h2>{{ equipment.designation }} ({{ equipment.code }})</h2>
+    <p><strong>Famille :</strong> {{ equipment.get_family_display }}</p>
+    <p><strong>Site :</strong> {{ equipment.get_site_display }}</p>
+    <p><strong>Capacité :</strong> {{ equipment.capacity }} T</p>
+    <p><strong>Constructeur :</strong> {{ equipment.manufacturer }}</p>
+
+    <a href="{% url 'equipments:equipment_update' equipment.code %}" class="btn btn-warning mb-3">
+        ✏️ Modifier l’équipement
+    </a>
+
+    <a href="{% url 'equipments:equipment_tree_html' equipment.code %}" class="btn btn-primary mb-3">
+    🌳 Voir l'arborescence des sous-ensembles
+    </a>
+
+    <div class="modal fade" id="arborescenceModal" tabindex="-1" aria-labelledby="arborescenceLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="arborescenceLabel">Arborescence de {{ equipment.designation }}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+          </div>
+          <div class="modal-body">
+            <ul id="arborescence-container" class="tree-root">
+                </ul>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            <button class="btn btn-success" id="btn-add-subset">
+              ➕ Ajouter un sous-ensemble
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+
+function chargerArborescence(button) {
+    const code = button.getAttribute('data-code');
+    fetch(`/equipments/${code}/arborescence/`)
+        .then(res => res.json())
+        .then(data => {
+            const container = document.getElementById('arborescence-container');
+            container.innerHTML = '';
+
+            function renderNode(node) {
+                const li = document.createElement('li');
+                li.classList.add('node');
+                li.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>${node.type}</strong> - <span class="text-primary">${node.code}</span> : ${node.designation}
+                            <br>
+                            <small class="text-muted">${node.caracteristiques || ''}</small>
+                        </div>
+                        <div>
+                            <button class="btn btn-sm btn-outline-secondary btn-edit" data-id="${node.id}">✏️</button>
+                            <button class="btn btn-sm btn-outline-danger btn-delete" data-id="${node.id}">🗑️</button>
+                        </div>
+                    </div>
+                `;
+                if (node.enfants && node.enfants.length > 0) {
+                    const ul = document.createElement('ul');
+                    node.enfants.forEach(child => ul.appendChild(renderNode(child)));
+                    li.appendChild(ul);
+                }
+                return li;
+            }
+
+            data.arborescence.forEach(node => {
+                container.appendChild(renderNode(node));
+            });
+
+            const modalTitle = document.getElementById('arborescenceLabel');
+            modalTitle.textContent = `Arborescence - ${data.equipement.code} : ${data.equipement.designation}`;
+
+            const modal = new bootstrap.Modal(document.getElementById('arborescenceModal'));
+            modal.show();
+            document.getElementById('arborescenceModal').setAttribute('aria-hidden', 'false');
+
+            setupButtons(data.equipement.code);
+        });
+}
+
+
+function setupButtons(equipementCode) {
+    const container = document.getElementById('arborescence-container');
+
+    container.querySelectorAll('.btn-add').forEach(btn => {
+        btn.addEventListener('click', e => {
+            const id = e.target.getAttribute('data-id');
+            window.location.href = `/equipments/sous-ensemble/new/?parent=${id}`;
+        });
+    });
+
+    container.querySelectorAll('.btn-edit').forEach(btn => {
+        btn.addEventListener('click', e => {
+            const id = e.target.getAttribute('data-id');
+            window.location.href = `/equipments/sous-ensemble/${id}/`;
+        });
+    });
+
+    container.querySelectorAll('.btn-delete').forEach(btn => {
+        btn.addEventListener('click', e => {
+            const id = e.target.getAttribute('data-id');
+            if (confirm("Êtes-vous sûr de vouloir supprimer cet élément ? Cette action est irréversible.")) {
+                supprimerSousEnsemble(id, equipementCode);
+            }
+        });
+    });
+
+    document.getElementById('btn-add-subset').addEventListener('click', () => {
+        window.location.href = `/equipments/sous-ensemble/new/${equipementCode}/`;
+    });
+}
+
+function supprimerSousEnsemble(id, equipementCode) {
+    fetch(`/equipments/sous-ensemble/delete/${id}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken')
+        }
+    }).then(res => {
+        if (res.ok) {
+            alert('Sous-ensemble supprimé avec succès');
+            chargerArborescence({getAttribute: () => equipementCode});
+        } else {
+            alert('Erreur lors de la suppression');
+        }
+    });
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+</script>
+
+<style>
+.tree-root, .tree-root ul {
+    list-style: none;
+    padding-left: 20px;
+}
+.node {
+    background: #f8f9fa;
+    border-left: 4px solid #0d6efd;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+.node ul {
+    margin-top: 5px;
+}
+</style>
+{% endblock %}
